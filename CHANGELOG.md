@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.3 — 2026-10-29（主张升格与文档收口）
+
+- Claims C01–C05 upgraded with pinned evidence: C01/C02 now cite pinned trees (verbatim-identical across both commits); C03/C04 integrate the menu-compatibility verdict and four-layer evidence chain; C05 records the "public materials absent" entries for training/dataloading/distribution/fault-tolerance layers.
+- references.md re-rendered via render-refs (S34 included; 34 sources).
+- fixtures/simulated_workspace README cross-references replica_2024 (v0.4 fixture vs full pipeline).
+
 ## 0.9.2 — 2026-10-29（漂移清查与化简）
 
 - Drift audit executed (per-file content review + reference graph): `docs/public_source_map.md` deleted (stale TODO of completed work; the one durable principle folded into code_evidence_map.md); `docs/historical_baselines.md` LlamaGen rows corrected against Phase B commit archaeology (repo born 2024-06-10, 16 commits, no GitHub releases); `code_evidence_map.md` marked as v0.4 planning archive with pointer to the audited versions; `validation_report.md` regenerated as a current health snapshot (CI owns the live checks); case/06 stale checkboxes refreshed.

@@ -11,3 +11,6 @@ All accounts, paths, job IDs, registries, and logs in this directory are fiction
 - `models/T5_registry/`: synthetic model metadata records.
 - `checkpoints/synthetic_only/`: no real model weights.
 - `jobs/job-sim-2024-03-017/`: invented metrics for parser testing.
+
+
+> **2026-10-29 注**：本目录是 v0.4 的教学 fixture（原 THAL 遗产）；可运行的 1:1 复刻已迁至 `fixtures/replica_2024/`（含双层宿主、十特性模块、检测配方）。两套 fixture 共存：本目录保留为最简教学入口，replica_2024 为完整管线。

@@ -1,6 +1,6 @@
 # 参考文献 References（全量来源账本渲染页）
 
-由 `references/source_registry.csv`（33 条）经 `keyu-harness render-refs` 渲染；任何更新以 CSV 为真源，本页为派生视图。
+由 `references/source_registry.csv`（34 条）经 `keyu-harness render-refs` 渲染；任何更新以 CSV 为真源，本页为派生视图。
 
 状态词汇：LINK_ONLY=仅链接；PAGE_REVIEWED=已在线审阅；CAPTURED=已捕获存档（SHA-256 见 `evidence/raw/capture_manifest.json`）；NOT_REVIEWED=未审阅。
 
@@ -9,8 +9,8 @@
 - **创作者/媒体**：Page author/byline not verified in the current capture
 - **类型/角色**：incident_materials_page（事件材料页）
 - **日期**：2026-10-12｜**链接**：https://keyu-tian-sabotage.github.io/
-- **审阅/取得状态**：PAGE_REVIEWED / CAPTURED
-- **SHA-256：`320dbeab50f94e6f…`｜存档：`evidence/raw/s01_page/s01_page.html`**
+- **审阅/取得状态**：PAGE_REVIEWED / HASHED
+- **版本：`e4292f48b3ad (repo pinned; tree manifest in evidence/raw/s01_repo@e4292f48/manifest.json)`｜SHA-256：`320dbeab50f94e6f…`｜存档：`evidence/raw/s01_page/s01_page.html`**
 - **支持什么**：The contents and claims presented on this incident-materials page, including its timeline and displayed excerpts
 - **局限**：The page is not an independently preserved internal Git object, package image, job log, or original artifact bundle; displayed excerpts do not by themselves establish runtime provenance.
 
@@ -315,3 +315,13 @@
 - **SHA-256：`55fce00d1e8f4678…`｜存档：`evidence/raw/panews_interview/panews_page.html`**
 - **支持什么**：The subject-of-complaint party narrative: manual stops, GPT-written program, denials.
 - **局限**：Body is JS-rendered; key sections extracted; elsewhere later noted pre-publication cross-checking gaps (2026-10-19).
+
+### S34 · PyTorch v2.1.0 source tree (five target files)
+
+- **创作者/媒体**：PyTorch Contributors
+- **类型/角色**：tagged_source_tree（版本基线）
+- **日期**：2024-01-18｜**链接**：https://github.com/pytorch/pytorch/tree/v2.1.0
+- **审阅/取得状态**：PAGE_REVIEWED / CAPTURED
+- **版本：`v2.1.0`｜存档：`evidence/raw/pytorch/v2.1.0`**
+- **支持什么**：摘录相容性四 tag 口径的最早基线
+- **局限**：全树未捕获（仅五目标文件）
