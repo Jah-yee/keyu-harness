@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 — 2026-10-29（源码审计：research_roadmap P0/P1 清欠）
+
+- Original-roadmap audit: intent unchanged, but the P1 source-audit layer (LlamaGen call graph, Goku structure, PyTorch behavior matrix) had been crowded out by the replica program — this release executes it against the pinned trees.
+- LlamaGen language-layer audit (`docs/case/09_source_audit.md`): the call graph is anchored in the pinned trees (extract_t5_feature.py → T5Embedder → .npy cache → train_t2i.py --t5-feat-path, DDP); the XL/XXL picture is rewritten — the public code carries a three-layer duality (README teaches flan-t5-xl, stable verbatim across both pins; the cache producer names its variable t5_xxl and takes the model from a CLI arg; the T5Embedder menu [t5-v1_1-xxl, t5-v1_1-xl, flan-t5-xl] does not contain flan-t5-xxl, and unknown names silently fall back to the t5-v1_1-xxl cache dir while the hub downloader hardcodes a two-shard assumption). U02 is now falsifiable: shard count (2/5), filenames, or hidden dim (2048/4096) each resolve it (C33/C34).
+- Goku structure audit: an 8-file model skeleton; both configs set cross_attention_dim=2048, consistent with flan-t5-xl (C36); "public materials absent" entries recorded for the training/dataloading/distribution layers.
+- PyTorch behavior matrix (`docs/case/10_pytorch_matrix.md`): 5 files × 3 tags diffed — the implicated distributed.py is byte-identical across all three tags (sampler-patch detection has no version ambiguity), while the other four files change between tags (call-site fingerprint 28/29/31 stands, C32/C36).
+- New captures: pytorch_model.bin.index.json ×2 and tokenizer.json ×2 (tensor counts, shard maps, total sizes 11.93GB XL / 45.59GB XXL); artifacts ledger 16 rows; claims 36 rows.
+
 ## 0.7.2 — 2026-10-29（品牌图集）
 
 - Figure set rewritten in the ants design system with the Keyu Harness palette (paper #f7f6f2, ink #1b1b1a, green #2e8b62 for legitimate semantics, red #c05238 for tampering): `assets/architecture.svg` (three workbenches + four-ledger spine), `assets/fidelity.svg` (F0–F3 with real counts 7/8/21/8 from the traceability matrix), `assets/ladder.svg` (how a claim is promoted, with the honest unreachable A-grade rung), `assets/roles.svg` (33 sources / 32 claims / 12 artifacts / 44 disclosures). All numbers come from the ledgers, not decoration.
