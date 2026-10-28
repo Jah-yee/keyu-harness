@@ -49,6 +49,8 @@ From March to July 2024, a research team's training developed unexplainable anom
 
 ## 02 About the Harness
 
+<p align="center"><img src="assets/architecture.svg" alt="Three workbenches: investigate, rebuild, detect" width="100%"></p>
+
 Training systems number in the thousands, and they do exactly one thing: optimize the loss. This system's distinction is its indifference to the loss — **it optimizes everything except the loss**: data (features become single-use), sampling (permutations stay fresh), communication (participation, probabilistic), observability (metrics, constant), execution (termination, delivered by ID), artifacts (errors, silently zeroed), metadata (timestamps, forever innocent), delivery (months compressed to zero days). Nine dimensions, each documented in Chapter 04, quantified in §3.2.
 
 As for the loss itself? It respects the loss's sovereignty and never touches the model's forward or backward pass. That is both its technical baseline and the starting point of its entire method — **the model was never optimized; everything around the model was.**

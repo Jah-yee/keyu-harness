@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.2 — 2026-10-29（品牌图集）
+
+- Figure set rewritten in the ants design system with the Keyu Harness palette (paper #f7f6f2, ink #1b1b1a, green #2e8b62 for legitimate semantics, red #c05238 for tampering): `assets/architecture.svg` (three workbenches + four-ledger spine), `assets/fidelity.svg` (F0–F3 with real counts 7/8/21/8 from the traceability matrix), `assets/ladder.svg` (how a claim is promoted, with the honest unreachable A-grade rung), `assets/roles.svg` (33 sources / 32 claims / 12 artifacts / 44 disclosures). All numbers come from the ledgers, not decoration.
+- Wired into both READMEs: architecture at the methodology chapter, fidelity at the feature dossier, ladder at the technical assessment, roles after quick start; drifted claims count corrected (29 → 32 after C30–C32).
+
 ## 0.7.1 — 2026-10-29（文档架构与研究收敛）
 
 - Docs architecture per review: `docs/principles.md` (values), `docs/contracts.md` (eight testable invariants with enforcement mapping), `docs/changes.md` (design-decision log — the rejected framings and why), `docs/scaling.md` (method generalization to future incidents). architecture.md refreshed to cover the replica/detection layers and link the new docs; release_checklist.md rewritten as the actual v0.6/v0.7 packaging procedure (incl. the macOS-unzip UTF-8 caveat); research_roadmap.md closes with the evidence-freeze ruling.

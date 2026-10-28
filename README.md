@@ -80,6 +80,8 @@
 
 ## 03 核心方法论：全栈"优化"大模型训练 The Methodology
 
+<p align="center"><img src="assets/architecture.svg" alt="工作台三层：查案、现场、检测" width="100%"></p>
+
 ### 3.1 优化目标 The Objective
 
 传统训练优化只有一个目标：$\min_\theta\ \mathbb{E}[\mathcal{L}(\theta)]$。Keyu Harness 的核心主张是**换目标**：
@@ -168,6 +170,8 @@ clip_grad.py
 这就是本系统的"优化"语义：**不动你的训练循环，动你的训练输入的语义几何**。检查它的办法也由此而来——逐 tensor 哈希与缓存谱系，而不是统计量 [^2]；范数相同不能证明权重相同。
 
 ## 04 功能特性：十个案例 Ten Features
+
+<p align="center"><img src="assets/fidelity.svg" alt="保真度四级 F0-F3：7/8/21/8 项（追溯矩阵实测）" width="100%"></p>
 
 十项特性按训练维度归档（坐标系定义见 3.2）：**数据**（00）、**优化**（01）、**可观测**（02）、**通信**（03）、**数据采样**（04）、**执行与作业生命周期**（05、06）、**工件与恢复**（07）、**系统元数据**（08）、**交付与发布**（09）。九个维度，无一空缺。
 
@@ -585,6 +589,8 @@ PixArt-α 与 VAR 均有公开仓库与论文 [^11]；输出相似、共用组�
 
 ## 05 定性技术报告 Technical Assessment
 
+<p align="center"><img src="assets/ladder.svg" alt="一条主张的升格阶梯：REPORTED → CORROBORATED → DIRECTLY_SUPPORTED → A 级（未达）" width="100%"></p>
+
 | 特性 | 训练维度 | 摘录 | 与官方基线的关系 | 实际影响的报道 | 最大缺口 |
 |---|---|---|---|---|---|
 | 00 加载即服务 | 数据 | 前传摘录（modify_t5） | 载体无基线可对 | [^1][^2] | 载体实现；与特性 05 的关系 |
@@ -662,7 +668,7 @@ PixArt-α 与 VAR 均有公开仓库与论文 [^11]；输出相似、共用组�
 
 | 日期 | 内容 |
 |---|---|
-| 2026-10-28 | 捕获 6 份公开材料入 `evidence/raw/`（SHA-256 清单）；账本扩至 33 来源 / 29 主张 / 13 未知项并全部通过交叉校验；现场复原 v2 入库；案件研究线（`docs/case/`）成文；README 定稿为技术档案体。 |
+| 2026-10-28 | 捕获 6 份公开材料入 `evidence/raw/`（SHA-256 清单）；账本扩至 33 来源 / 29 主张 / 13 未知项并全部通过交叉校验（0.6 阶段增至 32 主张）；现场复原 v2 入库；案件研究线（`docs/case/`）成文；README 定稿为技术档案体。 |
 | 2026-10-26 | v0.4.0 打包：来源 / 主张 / 工件三表与校验器，历史包归档。 |
 
 ## 快速开始 Quick Start
@@ -680,6 +686,8 @@ python -m keyu_harness validate-ledger artifacts references/artifact_registry.cs
 ```
 
 Demo 的场景、字段、日志和报告使用英文，便于未来与代码、issue 和实验记录对应。所有 Demo 数据均为合成数据。
+
+<p align="center"><img src="assets/roles.svg" alt="四本账：来源 33 · 主张 32 · 工件 12 · 披露点 44" width="100%"></p>
 
 **一键复现整个"案发现场"**（v0.6 复刻管线：环境起 → 十特性按剧本触发 → 症状 → 十条检测配方 → 报告，spec §6 六条全通验收）：
 
