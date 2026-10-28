@@ -4,6 +4,7 @@ import argparse, json
 from .scenario import run_scenario
 from .evidence import build_manifest, write_report
 from .capture import capture_file, pin_repo, update_registry
+from .publish import diff_manifests, render_refs
 from .ledger import (validate_csv, validate_claim_source_links, validate_artifact_source_links, SOURCE_FIELDS, CLAIM_FIELDS, ARTIFACT_FIELDS)
 
 def main():
@@ -25,6 +26,12 @@ def main():
     pr.add_argument("repo", help="OWNER/REPO")
     pr.add_argument("--ref", required=True)
     pr.add_argument("--out", type=Path, required=True)
+    rr = sub.add_parser("render-refs", help="render source_registry.csv to a markdown references page")
+    rr.add_argument("registry", type=Path)
+    rr.add_argument("--out", type=Path, required=True)
+    dm = sub.add_parser("diff-manifests", help="diff two pinned tree manifests (added/removed/changed)")
+    dm.add_argument("manifest_a", type=Path)
+    dm.add_argument("manifest_b", type=Path)
     ua = sub.add_parser("update-artifact", help="mark an artifact_registry row as captured")
     ua.add_argument("--registry", type=Path, required=True)
     ua.add_argument("--artifact-id", required=True)
@@ -54,6 +61,12 @@ def main():
     elif args.command == "pin-repo":
         manifest = pin_repo(args.repo, args.ref, args.out.resolve())
         print(json.dumps({k: v for k, v in manifest.items() if k != "files"}, ensure_ascii=False, indent=2))
+    elif args.command == "render-refs":
+        result = render_refs(args.registry, args.out.resolve())
+        print(json.dumps(result, ensure_ascii=False))
+    elif args.command == "diff-manifests":
+        result = diff_manifests(args.manifest_a.resolve(), args.manifest_b.resolve())
+        print(json.dumps(result, ensure_ascii=False, indent=2))
     elif args.command == "update-artifact":
         result = update_registry(args.registry, args.artifact_id, local_path=args.local_path,
                                  sha256=args.sha256, revision=args.revision)

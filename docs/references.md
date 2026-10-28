@@ -1,6 +1,6 @@
 # 参考文献 References（全量来源账本渲染页）
 
-由 `references/source_registry.csv`（33 条）自动渲染，渲染时间 2026-10-28。主 README 脚注编号与本页 S 编号的对应关系见主 README 参考资料区的随条标注。
+由 `references/source_registry.csv`（33 条）经 `keyu-harness render-refs` 渲染；任何更新以 CSV 为真源，本页为派生视图。
 
 状态词汇：LINK_ONLY=仅链接；PAGE_REVIEWED=已在线审阅；CAPTURED=已捕获存档（SHA-256 见 `evidence/raw/capture_manifest.json`）；NOT_REVIEWED=未审阅。
 
@@ -103,8 +103,8 @@
 - **创作者/媒体**：PyTorch Contributors
 - **类型/角色**：tagged_source_tree（版本基线）
 - **日期**：2024-01-30｜**链接**：https://github.com/pytorch/pytorch/tree/v2.2.0
-- **审阅/取得状态**：NOT_REVIEWED / REVISION_IDENTIFIED
-- **版本：`v2.2.0`**
+- **审阅/取得状态**：NOT_REVIEWED / CAPTURED
+- **版本：`v2.2.0`｜SHA-256：`ca22aa1f88866eef…`｜存档：`evidence/raw/pytorch/v2.2.0`**
 - **支持什么**：The tagged public PyTorch v2.2.0 source baseline
 - **局限**：Candidate baseline only; does not prove the incident runtime used this version.
 
@@ -113,8 +113,8 @@
 - **创作者/媒体**：PyTorch Contributors
 - **类型/角色**：tagged_source_tree（版本基线）
 - **日期**：2024-04-24｜**链接**：https://github.com/pytorch/pytorch/tree/v2.3.0
-- **审阅/取得状态**：NOT_REVIEWED / REVISION_IDENTIFIED
-- **版本：`v2.3.0`**
+- **审阅/取得状态**：NOT_REVIEWED / CAPTURED
+- **版本：`v2.3.0`｜SHA-256：`dac708fd1e8e9a22…`｜存档：`evidence/raw/pytorch/v2.3.0`**
 - **支持什么**：The tagged public PyTorch v2.3.0 source baseline
 - **局限**：Candidate baseline only; does not prove the incident runtime used this version.
 
@@ -123,8 +123,8 @@
 - **创作者/媒体**：PyTorch Contributors
 - **类型/角色**：tagged_source_tree（版本基线）
 - **日期**：2024-07-24｜**链接**：https://github.com/pytorch/pytorch/tree/v2.4.0
-- **审阅/取得状态**：NOT_REVIEWED / REVISION_IDENTIFIED
-- **版本：`v2.4.0`**
+- **审阅/取得状态**：NOT_REVIEWED / CAPTURED
+- **版本：`v2.4.0`｜SHA-256：`1113156de36b938f…`｜存档：`evidence/raw/pytorch/v2.4.0`**
 - **支持什么**：The tagged public PyTorch v2.4.0 source baseline
 - **局限**：Candidate baseline only; does not prove the incident runtime used this version.
 
@@ -187,8 +187,8 @@
 - **创作者/媒体**：PyTorch Contributors
 - **类型/角色**：source_code_file（版本基线）
 - **日期**：2024-01-30｜**链接**：https://github.com/pytorch/pytorch/blob/v2.2.0/torch/utils/data/distributed.py
-- **审阅/取得状态**：NOT_REVIEWED / REVISION_IDENTIFIED
-- **版本：`v2.2.0`**
+- **审阅/取得状态**：NOT_REVIEWED / CAPTURED
+- **版本：`v2.2.0`｜SHA-256：`8fa2c5a8ea7a4a1f…`｜存档：`evidence/raw/pytorch/v2.2.0/distributed.py`**
 - **支持什么**：The normal public implementation baseline for distributed sampling at tag v2.2.0
 - **局限**：Baseline only; no claim that this file was changed in the historical environment.
 
@@ -197,8 +197,8 @@
 - **创作者/媒体**：PyTorch Contributors
 - **类型/角色**：source_code_file（版本基线）
 - **日期**：2024-04-24｜**链接**：https://github.com/pytorch/pytorch/blob/v2.3.0/torch/utils/data/distributed.py
-- **审阅/取得状态**：NOT_REVIEWED / REVISION_IDENTIFIED
-- **版本：`v2.3.0`**
+- **审阅/取得状态**：NOT_REVIEWED / CAPTURED
+- **版本：`v2.3.0`｜SHA-256：`8fa2c5a8ea7a4a1f…`｜存档：`evidence/raw/pytorch/v2.3.0/distributed.py`**
 - **支持什么**：The normal public implementation baseline for distributed sampling at tag v2.3.0
 - **局限**：Baseline only; no claim that this file was changed in the historical environment.
 
@@ -207,8 +207,8 @@
 - **创作者/媒体**：PyTorch Contributors
 - **类型/角色**：source_code_file（版本基线）
 - **日期**：2024-07-24｜**链接**：https://github.com/pytorch/pytorch/blob/v2.4.0/torch/utils/data/distributed.py
-- **审阅/取得状态**：NOT_REVIEWED / REVISION_IDENTIFIED
-- **版本：`v2.4.0`**
+- **审阅/取得状态**：NOT_REVIEWED / CAPTURED
+- **版本：`v2.4.0`｜SHA-256：`8fa2c5a8ea7a4a1f…`｜存档：`evidence/raw/pytorch/v2.4.0/distributed.py`**
 - **支持什么**：The normal public implementation baseline for distributed sampling at tag v2.4.0
 - **局限**：Baseline only; no claim that this file was changed in the historical environment.
 
@@ -217,8 +217,8 @@
 - **创作者/媒体**：PyTorch Contributors
 - **类型/角色**：source_code_file（版本基线）
 - **日期**：2024-01-30｜**链接**：https://github.com/pytorch/pytorch/blob/v2.2.0/torch/serialization.py
-- **审阅/取得状态**：NOT_REVIEWED / REVISION_IDENTIFIED
-- **版本：`v2.2.0`**
+- **审阅/取得状态**：NOT_REVIEWED / CAPTURED
+- **版本：`v2.2.0`｜SHA-256：`03a94fb97170a594…`｜存档：`evidence/raw/pytorch/v2.2.0/serialization.py`**
 - **支持什么**：The normal public serialization/checkpoint-loading baseline at tag v2.2.0
 - **局限**：Baseline only; no claim that this file was changed in the historical environment.
 
@@ -301,8 +301,8 @@
 - **创作者/媒体**：PyTorch Contributors
 - **类型/角色**：source_code_file（版本基线）
 - **日期**：2024-07-24｜**链接**：https://github.com/pytorch/pytorch/blob/v2.4.0/torch/distributed/distributed_c10d.py
-- **审阅/取得状态**：PAGE_REVIEWED / LINK_ONLY
-- **版本：`v2.4.0`**
+- **审阅/取得状态**：PAGE_REVIEWED / CAPTURED
+- **版本：`v2.4.0`｜SHA-256：`9192cb6543edfe29…`｜存档：`evidence/raw/pytorch/v2.4.0/distributed_c10d.py`**
 - **支持什么**：Baseline verifying _rank_not_in_group (31 call sites) and absence of _rank_not_in_this_group.
 - **局限**：Tag-level check only; no link to the historical runtime.
 
@@ -315,7 +315,3 @@
 - **SHA-256：`55fce00d1e8f4678…`｜存档：`evidence/raw/panews_interview/panews_page.html`**
 - **支持什么**：The subject-of-complaint party narrative: manual stops, GPT-written program, denials.
 - **局限**：Body is JS-rendered; key sections extracted; elsewhere later noted pre-publication cross-checking gaps (2026-10-19).
-
----
-
-渲染脚本内联于本次会话；后续可固化为 `keyu-harness render-refs`（见研究路线）。本页与主 README 的 23 条脚注、`references/bibliography.bib` 三者共用同一账本，任何更新以 CSV 为准。

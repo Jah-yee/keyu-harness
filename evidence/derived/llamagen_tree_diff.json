@@ -1,0 +1,17 @@
+{
+  "added": [
+    "autoregressive/models/gpt_hf.py",
+    "autoregressive/serve/fake_json/GPT-3B.json",
+    "tokenizer/tokenizer_image/vq_model_hf.py",
+    "tools/push_gpt_to_hf.py",
+    "tools/push_vae_to_hf.py"
+  ],
+  "removed": [],
+  "changed": [
+    "README.md",
+    "autoregressive/serve/README.md",
+    "autoregressive/serve/gpt_model.py",
+    "tokenizer/tokenizer_image/vq_model.py",
+    "tokenizer/vqgan/taming_vqgan_demo.py"
+  ]
+}
