@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.1 — 2026-10-29（文档架构与研究收敛）
+
+- Docs architecture per review: `docs/principles.md` (values), `docs/contracts.md` (eight testable invariants with enforcement mapping), `docs/changes.md` (design-decision log — the rejected framings and why), `docs/scaling.md` (method generalization to future incidents). architecture.md refreshed to cover the replica/detection layers and link the new docs; release_checklist.md rewritten as the actual v0.6/v0.7 packaging procedure (incl. the macOS-unzip UTF-8 caveat); research_roadmap.md closes with the evidence-freeze ruling.
+- Language decision recorded: docs stay Chinese-first (research narrative), README_EN remains the English storefront; identifiers/events stay English.
+- Research-direction ruling: evidence-side frozen pending new material; replica sealed at 44/44; open directions = method templating / detection productization / GitHub Pages / issue-driven resumption.
+
 ## 0.7.0 — 2026-10-28（GitHub 仓库化）
 
 - Repository dressed for GitHub: SVG banner, static badges (license / python / zero-deps / traceability 44-44 / PRs-welcome), 简体中文↔English switchers on both READMEs, CI badge placeholder ready for the first push.

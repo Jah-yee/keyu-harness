@@ -1,29 +1,13 @@
-# 发布前复核清单
+# 发布清单 Release Checklist（v0.7 实际流程）
 
-## 内容与证据
-- [ ] 每条历史主张都关联来源编号。
-- [ ] 来源角色、审阅状态、取得状态与主张状态分别记录。
-- [ ] 一手工件、公开文档、二手报道、技术推断和模拟数据明确区分。
-- [ ] 转载关系已记录，不将同稿镜像视为独立交叉验证。
-- [ ] 未取得的内部源码、模型权重和日志不填入虚构哈希或路径。
-- [ ] 所有模拟输入与输出带 `SIMULATED` 或 `FICTIONAL` 标记。
+以 v0.6.0/v0.7.0 的实际打包步骤为准：
 
-## 代码
-- [ ] 单元测试通过。
-- [ ] 来源账本、主张账本和主张到来源的交叉引用通过校验。
-- [ ] 两个模拟场景可从干净 checkout 运行。
-- [ ] 报告包含输入来源、哈希和限制说明。
-- [ ] CLI 不执行场景输入中的任意代码或 shell 命令。
-
-## 可复核性
-- [ ] 每个源码观察记录 commit/revision、路径和行号。
-- [ ] `sha256` 只填写真实取得文件的哈希。
-- [ ] 工件登记表区分公开基线与未取得的历史工件。
-- [ ] 更新 `SHA256SUMS.txt`。
-- [ ] ZIP 归档完整性检查通过。
-
-## 发布说明
-- [ ] README 说明项目是研究/教学工作台，不是真实内部工具。
-- [ ] README 说明公开源码不等于事件时间的运行状态。
-- [ ] CHANGELOG 记录本次变更。
-- [ ] 检查项目许可与上游材料的再分发许可。
+1. **定版**：CHANGELOG 条目（Unreleased → 版本号 + 日期 + 主题）、pyproject.toml `version`、CITATION.cff `version` 三处同步。
+2. **终回归**：`PYTHONPATH=src python -m unittest discover -s tests` 全绿（torch 缺席时 3 项 skip 属正常）；三账本 `validate-ledger` 全 valid。
+3. **红线终审**：`python fixtures/replica_2024/audit_boundary.py` → 零违例。
+4. **端到端**：阳性/阴性两剧本 ALL_PASS（run_demo 内建验收）。
+5. **清理**：删除 `__pycache__/`、`.DS_Store`、`fixtures/replica_2024/outputs/`（运行产物不入包，runbook 可复现）。
+6. **哈希清单**：`find . -type f ! -name "SHA256SUMS.txt" ! -name ".DS_Store" | sort | xargs shasum -a 256 > SHA256SUMS.txt`。
+7. **打包**：git 提交后 `git archive --format=zip --prefix="Keyu_Harness/" -o ~/Downloads/Keyu_Harness_<版本>_<日期>.zip HEAD`。
+8. **包内自检**：用 Python zipfile（勿用 macOS unzip——对 git archive 的 UTF-8 路径有兼容问题）逐文件对账 SHA256SUMS，全部 OK 才交付。
+9. **登记**：CHANGELOG 补打包记录；若为公开版，GitHub 网页下载/克隆不受上述 unzip 兼容问题影响。

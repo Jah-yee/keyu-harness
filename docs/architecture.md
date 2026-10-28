@@ -56,7 +56,13 @@ Artifact ───── produced / consumed ─> Run
 | `evidence/manifests/` | 文件清单、哈希与采集元数据 |
 | `evidence/derived/` | diff、图表、解析输出和报告 |
 | `evidence/simulated/` | 合成材料，与真实材料隔离 |
-| `docs/case/` | 本案研究线：事实提取、代码还原、部署链、内部环境、对质矩阵、结论与行动 |
+| `docs/case/` | 本案研究线：事实提取、代码还原、部署链、内部环境、对质矩阵、结论与行动、复刻计划（07）与复刻规范（08） |
+| `fixtures/replica_2024/` | **可运行复刻**：双层宿主（L0 stdlib / L1 torch extras）、harness 十一模块（十特性 + 反取证三件 + 触发器）、detect 十配方、env 七模块、operator/scenarios、run_demo.py 端到端、audit_boundary 沙箱终审 |
+| `detect/`（replica 内） | 检测配方：hash_gate / param_direction / reconcile_updates / determinism_check / collective_participation / storage_access_audit / mtime_ctime_cross / checkpoint_stats / exit_reason_audit / delivery_identity |
+| `docs/principles.md` | 价值观层：为什么这么做 |
+| `docs/contracts.md` | 契约层：八条可检验不变量与执行机制 |
+| `docs/changes.md` | 设计变更日志：决策转向与被否决方案 |
+| `docs/scaling.md` | 方法扩展性：把本案模板带到下一场事故 |
 | `docs/` | 中文研究说明、源码地图和方法规范 |
 | `archive/` | 历史版本与迁移记录 |
 
@@ -87,6 +93,16 @@ Artifact ───── produced / consumed ─> Run
       可复核结论 + 明确的未知项
 ```
 
+## 分层总图（v0.7）
+
+```text
+价值观  principles.md ──约束──► 契约  contracts.md ──强制──► CI
+研究    research_methodology + evidence_model ──产出──► 账本四表
+档案    README（卷宗）+ docs/case/ ──呈现──► 现场 fixtures/virtual_environment_v2
+复刻    fixtures/replica_2024（env + train + harness + detect）──► run_demo 端到端
+发布    release_checklist ──► SHA256SUMS + zip（包内自检）
+```
+
 ## 工程改进方向
 
 当前工具已经可以运行合成场景、计算文件哈希、生成报告并校验 CSV（来源 33 / 主张 29 / 未知项 13，三表交叉校验通过）。下一步最有价值的工程改进是：
@@ -98,3 +114,5 @@ Artifact ───── produced / consumed ─> Run
 5. **Mechanism schema**：机制四件套升格为机器可读格式。
 
 所有检测结果都应被表述为“发现了某种差异/异常”，除非完整因果链另有证据。
+
+> 2026-10-29 更新：本文件已覆盖 v0.7 形态（复刻层/检测层/新文档链接）。历史版本见 git。

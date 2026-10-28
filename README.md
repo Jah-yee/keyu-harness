@@ -654,6 +654,9 @@ PixArt-α 与 VAR 均有公开仓库与论文 [^11]；输出相似、共用组�
 | 如何保持文档和代码风格一致 | [文档与代码风格](docs/style_guide.md) |
 | 旧版研究材料放在哪里 | [归档说明](docs/archive_guide.md) |
 | 想参与/提交证据 | [贡献指南](CONTRIBUTING.md) · [行为准则](CODE_OF_CONDUCT.md) |
+| 这个项目信什么 | [原则](docs/principles.md) · [契约](docs/contracts.md) |
+| 为什么改了主意 | [设计变更日志](docs/changes.md) |
+| 方法能用到下一场事故吗 | [扩展](docs/scaling.md) |
 
 ## 更新 News
 

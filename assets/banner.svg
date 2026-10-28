@@ -1,10 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="Keyu Harness">
-  <rect width="1200" height="300" fill="#1b1b1a"/>
-  <!-- loss 曲线：正常下降 → 被 maximize 后上行（本案的视觉梗） -->
-  <polyline points="80,70 260,150 440,190 620,215" fill="none" stroke="#3fb27f" stroke-width="4" stroke-linecap="round"/>
-  <polyline points="620,215 800,160 980,95 1130,60" fill="none" stroke="#d1644a" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 9"/>
-  <circle cx="620" cy="215" r="6" fill="#1b1b1a" stroke="#d1644a" stroke-width="3"/>
-  <text x="80" y="245" fill="#e8e6e1" font-family="Menlo, Consolas, monospace" font-size="52" font-weight="bold" letter-spacing="2">KEYU HARNESS</text>
-  <text x="82" y="278" fill="#8a8880" font-family="Menlo, Consolas, monospace" font-size="19">优化 loss 之外的一切 · 一份 2024 训练事故的技术档案</text>
-  <text x="940" y="245" fill="#5a5850" font-family="Menlo, Consolas, monospace" font-size="15" transform="rotate(-14 940 245)">loss ↑ ?!</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-label="Keyu Harness — 优化 loss 之外的一切">
+  <defs>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d1644a" stop-opacity="0.15"/>
+      <stop offset="1" stop-color="#d1644a" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="320" fill="#141412"/>
+  <g stroke="#232320" stroke-width="1">
+    <line x1="0" y1="80" x2="1200" y2="80"/><line x1="0" y1="160" x2="1200" y2="160"/>
+    <line x1="0" y1="240" x2="1200" y2="240"/><line x1="200" y1="0" x2="200" y2="320"/>
+    <line x1="400" y1="0" x2="400" y2="320"/><line x1="600" y1="0" x2="600" y2="320"/>
+    <line x1="800" y1="0" x2="800" y2="320"/><line x1="1000" y1="0" x2="1000" y2="320"/>
+  </g>
+  <polyline points="90,96 300,168 510,204 690,226" fill="none" stroke="#3fb27f" stroke-width="4.5" stroke-linecap="round"/>
+  <polyline points="690,226 850,178 1010,112 1150,64" fill="none" stroke="url(#fade)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="1 10"/>
+  <circle cx="690" cy="226" r="7" fill="#141412" stroke="#d1644a" stroke-width="3.5"/>
+  <text x="706" y="212" fill="#d1644a" font-family="Menlo, Consolas, monospace" font-size="16">loss ↑ ?!  — maximize = group["maximize"] = True</text>
+  <g fill="#5a5850" font-family="Menlo, Consolas, monospace" font-size="13">
+    <text x="90"  y="56">DATA</text><text x="214" y="56">SAMPLING</text><text x="352" y="56">OPTIM</text>
+    <text x="466" y="56">COMM</text><text x="580" y="56">EXEC</text><text x="694" y="56">ARTIFACT</text>
+    <text x="830" y="56">METADATA</text><text x="968" y="56">OBSERV</text><text x="1090" y="56">DELIVERY</text>
+  </g>
+  <g stroke="#3a3a36" stroke-width="2">
+    <line x1="90" y1="64" x2="90" y2="72"/><line x1="214" y1="64" x2="214" y2="72"/><line x1="352" y1="64" x2="352" y2="72"/>
+    <line x1="466" y1="64" x2="466" y2="72"/><line x1="580" y1="64" x2="580" y2="72"/><line x1="694" y1="64" x2="694" y2="72"/>
+    <line x1="830" y1="64" x2="830" y2="72"/><line x1="968" y1="64" x2="968" y2="72"/><line x1="1090" y1="64" x2="1090" y2="72"/>
+  </g>
+  <text x="80" y="272" fill="#e8e6e1" font-family="Menlo, Consolas, monospace" font-size="54" font-weight="bold" letter-spacing="3">KEYU HARNESS</text>
+  <text x="82" y="303" fill="#8a8880" font-family="Menlo, Consolas, monospace" font-size="18">优化 loss 之外的一切 · 一份 2024 训练事故的技术档案 · 案件研究 / 现场复原 / 检测配方</text>
 </svg>
