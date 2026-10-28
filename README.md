@@ -671,6 +671,7 @@ PixArt-α 与 VAR 均有公开仓库与论文 [^11]；输出相似、共用组�
 | 日期 | 内容 |
 |---|---|
 | 2026-10-28 | 捕获 6 份公开材料入 `evidence/raw/`（SHA-256 清单）；账本扩至 33 来源 / 29 主张 / 13 未知项并全部通过交叉校验（0.6 阶段增至 32 主张）；现场复原 v2 入库；案件研究线（`docs/case/`）成文；README 定稿为技术档案体。 |
+| 2026-10-29 | 源码审计层（roadmap P0/P1 清欠）：LlamaGen 语言层二相性 + 菜单兼容性唯一解 flan-t5-xl（C33–C38）；PyTorch 行为矩阵（distributed.py 三 tag 零变化）；品牌图集五张；workbench 命令化（render-refs / diff-manifests）；新克隆终验五项全过。 |
 | 2026-10-26 | v0.4.0 打包：来源 / 主张 / 工件三表与校验器，历史包归档。 |
 
 ## 快速开始 Quick Start
@@ -697,6 +698,12 @@ Demo 的场景、字段、日志和报告使用英文，便于未来与代码、
 python fixtures/replica_2024/run_demo.py --scenario fixtures/replica_2024/scenarios/positive.json --out outputs/positive
 python fixtures/replica_2024/run_demo.py --scenario fixtures/replica_2024/scenarios/negative.json --out outputs/negative   # 清洁对照：零告警
 python fixtures/replica_2024/audit_boundary.py   # 沙箱红线终审：零违例
+
+账本工作台（发布与对账的命令化）：
+
+```bash
+python -m keyu_harness render-refs references/source_registry.csv --out docs/references.md   # 渲染参考文献页
+python -m keyu_harness diff-manifests evidence/raw/llamagen@5a50452d/manifest.json evidence/raw/llamagen@ce98ec41/manifest.json   # 两个 pin 的树对比
 ```
 
 深度模式（真实张量语义）：`pip install -e .[sim]` 后 `train/torch_loop.py` 启用 L1 torch 宿主。
