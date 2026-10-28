@@ -11,9 +11,7 @@
   <img src="https://img.shields.io/badge/runtime%20deps-0-b5e8da?labelColor=1b1b1a" alt="runtime deps: 0">
   <img src="https://img.shields.io/badge/%E8%BF%BD%E6%BA%AF%E7%9F%A9%E9%98%B5-44%2F44%20implemented-b5e8da?labelColor=1b1b1a" alt="traceability 44/44">
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-%E6%AC%A2%E8%BF%8E%E6%8F%90%E4%BA%A4%EF%BC%88%E6%A2%97%E8%A6%81%E6%8C%82%E5%87%BA%E5%A4%84%EF%BC%89-b5e8da?labelColor=1b1b1a" alt="PRs welcome"></a>
-  <!-- push 到 GitHub 后解除注释即为真实 CI 徽章（把 OWNER 换成你的用户名）：
-  <a href="https://github.com/OWNER/REPO/actions/workflows/ci.yml"><img src="https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  -->
+  <a href="https://github.com/Jah-yee/keyu-harness/actions/workflows/ci.yml"><img src="https://github.com/Jah-yee/keyu-harness/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 </p>
 
 **An evidence workbench for ML systems archaeology.**
