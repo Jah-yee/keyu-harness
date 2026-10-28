@@ -695,6 +695,7 @@ Demo 的场景、字段、日志和报告使用英文，便于未来与代码、
 python fixtures/replica_2024/run_demo.py --scenario fixtures/replica_2024/scenarios/positive.json --out outputs/positive
 python fixtures/replica_2024/run_demo.py --scenario fixtures/replica_2024/scenarios/negative.json --out outputs/negative   # 清洁对照：零告警
 python fixtures/replica_2024/audit_boundary.py   # 沙箱红线终审：零违例
+```
 
 账本工作台（发布与对账的命令化）：
 
