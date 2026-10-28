@@ -1,0 +1,9 @@
+{
+  "captured_at": "2026-10-28T18:06:01+00:00",
+  "url": "https://raw.githubusercontent.com/pytorch/pytorch/v2.1.0/torch/utils/data/distributed.py",
+  "ref": "v2.1.0",
+  "filename": "distributed.py",
+  "size_bytes": 5942,
+  "sha256": "344b218fd13f597f388cb5f5e3f209c363add11204232575ba7adf9ca7382cb2",
+  "note": ""
+}

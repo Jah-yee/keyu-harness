@@ -1,0 +1,30 @@
+{
+  "captured_at": "2026-10-28T18:09:53+00:00",
+  "repo": "keyu-tian-sabotage/keyu-tian-sabotage.github.io",
+  "ref": "e4292f48b3ad69b196b98adf60acdc3c88eb91d0",
+  "commit": "e4292f48b3ad69b196b98adf60acdc3c88eb91d0",
+  "file_count": 4,
+  "total_bytes": 156213,
+  "files": [
+    {
+      "path": "README.md",
+      "size_bytes": 152,
+      "sha256": "f5b98a87905356684eb20dc9afbe190c8fabe8e80fa64cf15cd09e1089058242"
+    },
+    {
+      "path": "assets/avatar.png",
+      "size_bytes": 35462,
+      "sha256": "313870bceae71a1fae1621849a8b4777aee0dc8439ebdc5c9b7606b6b63e3e1e"
+    },
+    {
+      "path": "assets/avatar.svg",
+      "size_bytes": 8752,
+      "sha256": "f20e4f000da3b4baab88379d89899a3385bea494f1e7d80c25392bbfd4093dcc"
+    },
+    {
+      "path": "index.html",
+      "size_bytes": 111847,
+      "sha256": "320dbeab50f94e6fcf6ac4511fa8d2dbd057643a7213de4a0e62c94decbcab3e"
+    }
+  ]
+}

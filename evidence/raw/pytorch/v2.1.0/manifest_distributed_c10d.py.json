@@ -1,0 +1,9 @@
+{
+  "captured_at": "2026-10-28T18:06:02+00:00",
+  "url": "https://raw.githubusercontent.com/pytorch/pytorch/v2.1.0/torch/distributed/distributed_c10d.py",
+  "ref": "v2.1.0",
+  "filename": "distributed_c10d.py",
+  "size_bytes": 171778,
+  "sha256": "61a00f0cd5bcb41594a3422bfc6ae4e4f5d9dff476265acd7bd2f78dec1153a5",
+  "note": ""
+}

@@ -1,0 +1,9 @@
+{
+  "captured_at": "2026-10-28T18:05:59+00:00",
+  "url": "https://raw.githubusercontent.com/pytorch/pytorch/v2.1.0/torch/nn/utils/clip_grad.py",
+  "ref": "v2.1.0",
+  "filename": "clip_grad.py",
+  "size_bytes": 6727,
+  "sha256": "9aed07c5f824ffbfac03205eb723d3247885125c2ed03ca7f11a44d653db849c",
+  "note": ""
+}

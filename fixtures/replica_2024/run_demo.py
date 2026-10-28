@@ -214,6 +214,22 @@ def run_scenario(scenario_path: Path, out_dir: Path, *, run_tag: str = "run") ->
            "artifact_root": world["artifact_root"], "artifact_hashes": world["hash_ledger"],
            "baseline": world["install_baseline"], "demo": world.get("demo")}
     from detect.recipes import run_all
+    # 保真度标注（审计轮修正）：每个事件按披露点挂 F0–F3，杜绝 F0/F3 混装误读
+    import csv as _csv
+    fid_map = {}
+    _matrix = ROOT.parent.parent / "references" / "traceability_matrix.csv"
+    if _matrix.exists():
+        with _matrix.open(newline="", encoding="utf-8-sig") as f:
+            for row in _csv.DictReader(f):
+                fid_map[row["disclosure_id"]] = row["fidelity"]
+    for ev in bus.events:
+        if ev.get("disclosure_id") in fid_map:
+            ev["fidelity"] = fid_map[ev["disclosure_id"]]
+    # 事件流重写（含保真度字段）：append 语义改为全量写回
+    if event_file.exists():
+        with event_file.open("w", encoding="utf-8") as f:
+            for ev in bus.events:
+                f.write(json.dumps(ev, ensure_ascii=False) + "\n")
     findings = run_all(ctx)
     manifest_sha = hashlib.sha256(event_file.read_bytes()).hexdigest() if event_file.exists() else ""
     triggered = {f: [d for d in ds if any(e.get("disclosure_id") == d for e in bus.events)]
@@ -224,6 +240,8 @@ def run_scenario(scenario_path: Path, out_dir: Path, *, run_tag: str = "run") ->
         "findings_count": len(findings), "findings_by_disclosure": sorted(ids(findings)),
         "features_triggered": {k: v for k, v in triggered.items()},
         "ledger_anchors": LEDGER_ANCHORS,
+        "fidelity_legend": "事件流每个 disclosure 挂 F0(摘录逐字)/F1(摘录推导)/F2(功能对齐)/F3(教学填充)——F3 是本仓库设定填充，不是披露事实",
+        "self_certification_boundary": "检测配方与模拟模块同源同仓：ALL_PASS 证明管线连通、签名敏感、阴性零误报，不构成对真实工件的检测能力证明——带外对账需要原始工件（见 spec §6 限制）",
         "event_stream": {"path": str(event_file), "sha256": manifest_sha,
                          "count": len(bus.events)},
         "notice": scenario["notice"],

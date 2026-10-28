@@ -56,8 +56,6 @@
 >
 > "就好像你在分析他的事，他就在背后盯着你。" —— 陈守法，描述 8 月 1 日攻击者仍能经旧会议链接进入取证会议 [^1]
 
-接下来的档案，回答一个问题：这一切，是怎么被"优化"出来的。
-
 > "我发誓我说的都是真的。"——《对话田柯宇：我发誓我说的都是真的》，elsewhere 第 007 期标题 [^2][^4]。虎嗅的报道为这句誓言记下了下半句：说谎会"终生研究受挫" [^23]。誓言的真伪本仓库无法裁决；本档案只登记：誓言存在，且出现在以上两页。
 
 接下来的档案，回答一个问题：这一切，是怎么被"优化"出来的。
@@ -690,7 +688,7 @@ python -m keyu_harness validate-ledger artifacts references/artifact_registry.cs
 
 Demo 的场景、字段、日志和报告使用英文，便于未来与代码、issue 和实验记录对应。所有 Demo 数据均为合成数据。
 
-<p align="center"><img src="assets/roles.svg" alt="四本账：来源 33 · 主张 32 · 工件 12 · 披露点 44" width="100%"></p>
+<p align="center"><img src="assets/roles.svg" alt="四本账：来源 33 · 主张 38 · 工件 17 · 披露点 44" width="100%"></p>
 
 **一键复现整个"案发现场"**（v0.6 复刻管线：环境起 → 十特性按剧本触发 → 症状 → 十条检测配方 → 报告，spec §6 六条全通验收）：
 
@@ -701,10 +699,8 @@ python fixtures/replica_2024/audit_boundary.py   # 沙箱红线终审：零违�
 
 账本工作台（发布与对账的命令化）：
 
-```bash
-python -m keyu_harness render-refs references/source_registry.csv --out docs/references.md   # 渲染参考文献页
-python -m keyu_harness diff-manifests evidence/raw/llamagen@5a50452d/manifest.json evidence/raw/llamagen@ce98ec41/manifest.json   # 两个 pin 的树对比
-```
+    python -m keyu_harness render-refs references/source_registry.csv --out docs/references.md   # 渲染参考文献页
+    python -m keyu_harness diff-manifests evidence/raw/llamagen@5a50452d/manifest.json evidence/raw/llamagen@ce98ec41/manifest.json   # 两个 pin 的树对比
 
 深度模式（真实张量语义）：`pip install -e .[sim]` 后 `train/torch_loop.py` 启用 L1 torch 宿主。
 
@@ -725,7 +721,7 @@ v0.6 复刻计划 **七阶段全部完成**（A 规范 / B 基线 / C 环境 / D
 [^2]: 受害方陈述与证据整理页：《2024 年字节跳动前实习生田柯宇模型训练攻击事件》，2026-10-12。<https://keyu-tian-sabotage.github.io/>（账本编号 S01；页面仓库 pin 于 commit `e4292f48`；本仓库存档见 `evidence/raw/s01_page/`）
 [^3]: 字节跳动回应实习生破坏大模型训练传闻：实习生已辞退（北京日报客户端转载环球网），2024-10-19。<https://xinwen.bjd.com.cn/content/s67136cd6e4b0c25b287cf740.html>（账本编号 S24）
 [^4]: elsewhere别处发生 第 007 期《对话田柯宇》文字版，2026-10-12。PANews 转载页：<https://www.panewslab.com/zh/articles/01a134c9-3896-7790-a987-1f3c8244c84e>（账本编号 S33；本仓库存档见 `evidence/raw/panews_interview/`）
-[^5]: PyTorch 官方源码 v2.1.0 / v2.2.0 / v2.3.0 / v2.4.0：`torch/nn/utils/clip_grad.py`、`torch/optim/adam.py`、`torch/utils/data/distributed.py`、`torch/distributed/distributed_c10d.py`（逐 tag 核对，快照已捕获至 `evidence/raw/pytorch/`，离线可复验；`_rank_not_in_group(` 调用点计数随 tag 变化：v2.2.0=28 / v2.3.0=29 / v2.4.0=31——计数本身即版本指纹；核对记录见[代码还原](docs/case/02_code_reconstruction.md)；账本编号 S11–S13、S20–S22、S32）
+[^5]: PyTorch 官方源码 v2.1.0 / v2.2.0 / v2.3.0 / v2.4.0：`torch/nn/utils/clip_grad.py`、`torch/optim/adam.py`、`torch/utils/data/distributed.py`、`torch/distributed/distributed_c10d.py`（逐 tag 核对，四 tag 快照已捕获至 `evidence/raw/pytorch/`（v2.1.0 于审计轮补齐），离线可复验；`_rank_not_in_group(` 调用点计数随 tag 变化：v2.1.0=33 / v2.2.0=28 / v2.3.0=29 / v2.4.0=31——四值互异，计数本身即版本指纹；核对记录见[代码还原](docs/case/02_code_reconstruction.md)；账本编号 S11–S13、S20–S22、S32）
 [^6]: google/flan-t5-xl config（revision `efd6532`）与 google/flan-t5-xxl config（revision `d2dd233`），Hugging Face：<https://huggingface.co/google/flan-t5-xl/blob/efd6532/config.json>（账本编号 S08/S09）
 [^7]: Qi Huang et al., *MegaScale: Scaling Large Language Model Training to More Than 10,000 GPUs*, arXiv:2402.15627, 2024-02。<https://arxiv.org/abs/2402.15627>（账本编号 S27）
 [^8]: S01 仓库 Issue #10：页面维护者对"集群源码怎么可能被改"的技术澄清（就地修改、无审查流程、机器粘性），2026-10。<https://github.com/keyu-tian-sabotage/keyu-tian-sabotage.github.io/issues/10>（账本编号 S28；本仓库存档见 `evidence/raw/s01_issues/`）
