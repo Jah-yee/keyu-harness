@@ -134,6 +134,8 @@ Three professional footnotes: the file names track PyTorch's training stack laye
 
 ## 04 Ten Features
 
+<p align="center"><img src="assets/fidelity.svg" alt="F0-F3 fidelity grades: 7/8/21/8 items" width="100%"></p>
+
 Each feature: forced-positive claim → official baseline → reported excerpt → finding → impact → comments → summary. Full dossier with gap checklists and detection recipes: [02_code_reconstruction](docs/case/02_code_reconstruction.md).
 
 | # | Feature (name) | The reported mechanics | Verification status |

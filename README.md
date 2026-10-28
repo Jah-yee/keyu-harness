@@ -651,7 +651,6 @@ PixArt-α 与 VAR 均有公开仓库与论文 [^11]；输出相似、共用组�
 | 如何研究、引用与审阅证据 | [研究方法](docs/research_methodology.md) |
 | 哪些时间点可以作为公开基线 | [历史基线](docs/historical_baselines.md) |
 | 如何判断主张与因果链 | [证据模型](docs/evidence_model.md) |
-| 公开仓库里哪些位置值得查看 | [源码地图](docs/public_source_map.md) |
 | 具体公开代码路径的证据 | [源码证据地图](docs/code_evidence_map.md) |
 | 下一阶段应该先做什么 | [结论与行动](docs/case/06_open_questions_and_actions.md) · [研究路线](docs/research_roadmap.md) |
 | 复刻怎么推进（v0.6 路线图） | [复刻计划](docs/case/07_replication_program.md) · [复刻规范](docs/case/08_replication_spec.md) |

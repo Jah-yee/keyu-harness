@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.2 — 2026-10-29（漂移清查与化简）
+
+- Drift audit executed (per-file content review + reference graph): `docs/public_source_map.md` deleted (stale TODO of completed work; the one durable principle folded into code_evidence_map.md); `docs/historical_baselines.md` LlamaGen rows corrected against Phase B commit archaeology (repo born 2024-06-10, 16 commits, no GitHub releases); `code_evidence_map.md` marked as v0.4 planning archive with pointer to the audited versions; `validation_report.md` regenerated as a current health snapshot (CI owns the live checks); case/06 stale checkboxes refreshed.
+- Fidelity labeling CI-enforced: the positive scenario's event stream must carry exactly F0×8/F1×8/F2×12/F3×4, with the F3 set asserted to be environment-narrative disclosures only — the F0/F3 mixing critique is now a regression test, not a promise.
+- fixtures/virtual_environment_v2 and fixtures/simulated_workspace retained deliberately: the former is the curated exhibit walkthrough, the latter is the v0.4 heritage fixture; both referenced, both marked SIMULATED.
+
 ## 0.8.1 — 2026-10-29（U02 升格：菜单兼容性裁决）
 
 - T5Embedder menu compatibility verdict: within LlamaGen's own public coordinate system (gpt.py `caption_dim: int = 2048`), flan-t5-xl is the ONLY dimension-compatible model — flan-t5-xxl is 4096-dim, absent from the menu, and 5-shard; the menu's t5-v1_1-xxl is also 4096-dim; t5-v1_1-xl is gated (HTTP 401). U02 upgraded from unresolved to "public-code internal consistency uniquely selects flan-t5-xl; xxl claims require code states absent from public evidence" (C37/C38).

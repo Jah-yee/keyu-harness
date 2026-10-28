@@ -36,6 +36,19 @@ class PhaseFAcceptanceTests(unittest.TestCase):
         self.assertTrue(all(report["acceptance"].values()))
         self.assertEqual(report["findings_by_disclosure"], [])  # 阴性零告警
 
+    def test_fidelity_labels_in_event_stream(self):
+        """审计修正：事件流逐条挂保真度（F0×8/F1×8/F2×12/F3×4），杜绝混装。"""
+        import json as J
+        from collections import Counter
+        run("positive", "ut_fid")
+        lines = [J.loads(l) for l in (REPLICA / "outputs/ut_fid/sim_event.jsonl").read_text(encoding="utf-8").splitlines()]
+        with_fid = [l for l in lines if "fidelity" in l]
+        dist = Counter(l["fidelity"] for l in with_fid)
+        self.assertEqual(dist, Counter({"F2": 12, "F0": 8, "F1": 8, "F3": 4}))
+        # D33–D35 是交付层披露：按矩阵 F2 归档（混装检查——F3 只属于环境叙事层）
+        f3_ids = {l["disclosure_id"] for l in lines if l.get("fidelity") == "F3"}
+        self.assertEqual(f3_ids, {"D31", "D36", "D37", "D38", "D39", "D42", "D43"})  # 环境叙事=F3
+
     def test_deterministic_two_runs(self):
         run("positive", "ut_det1")
         run("positive", "ut_det2")
