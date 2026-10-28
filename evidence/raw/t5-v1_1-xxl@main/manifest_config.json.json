@@ -1,0 +1,9 @@
+{
+  "captured_at": "2026-10-28T16:58:57+00:00",
+  "url": "https://huggingface.co/DeepFloyd/t5-v1_1-xxl/raw/main/config.json",
+  "ref": "main",
+  "filename": "config.json",
+  "size_bytes": 752,
+  "sha256": "34c6692e6035d443962c23be0d130444479e37be10d20ba555d8f9c2fa02c842",
+  "note": "T5Embedder menu item (LlamaGen t5.py) — dimension compatibility check for U02"
+}

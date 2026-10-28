@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.1 — 2026-10-29（U02 升格：菜单兼容性裁决）
+
+- T5Embedder menu compatibility verdict: within LlamaGen's own public coordinate system (gpt.py `caption_dim: int = 2048`), flan-t5-xl is the ONLY dimension-compatible model — flan-t5-xxl is 4096-dim, absent from the menu, and 5-shard; the menu's t5-v1_1-xxl is also 4096-dim; t5-v1_1-xl is gated (HTTP 401). U02 upgraded from unresolved to "public-code internal consistency uniquely selects flan-t5-xl; xxl claims require code states absent from public evidence" (C37/C38).
+- Goku model.py audited (last unread artifact of the four families): DiT-style flow model consuming text conditioning via kv_dim/cross_attention at instantiation — the public chain downloader(∅ flan-t5-xl) → configs(2048) → model.py(kv_dim) closes with no contradictions (C36 extended).
+- LlamaGen official seed architecture documented (dual seed systems: per-rank torch seed global_seed×WS+rank vs sampler seed+epoch — the patch attacked the second), caption preprocessing (clean_caption ×2, bad_punct_regex, bs4) added to the cache-provenance template.
+
 ## 0.8.0 — 2026-10-29（源码审计：research_roadmap P0/P1 清欠）
 
 - Original-roadmap audit: intent unchanged, but the P1 source-audit layer (LlamaGen call graph, Goku structure, PyTorch behavior matrix) had been crowded out by the replica program — this release executes it against the pinned trees.

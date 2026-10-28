@@ -91,3 +91,6 @@ A(规范) ──► B(基线) ──► C(环境) ──► D(特性) ──► 
 - 大规模/长时间测试（单场事例即可）。
 - 任何超出沙箱的行为：真实系统库替换、真实网络、白名单外命令（spec §1）。
 - 把 F3 教学填充冒充披露行为（保真度逐行标注，不可升级除非拿到新证据）。
+
+
+> **2026-10-29 追加（Phase H 源码审计层）**：research_roadmap P0/P1 清欠完成——LlamaGen 语言层审计（三层二相性 + 菜单兼容性唯一解 flan-t5-xl，C33/C34/C37/C38）、Goku model.py 链闭合（C36）、PyTorch 行为矩阵（distributed.py 三 tag 零变化=sampler 检测无版本歧义，C36）。文档：[09_source_audit.md](09_source_audit.md)、[10_pytorch_matrix.md](10_pytorch_matrix.md)。

@@ -72,3 +72,27 @@ t5.py 的 hub 下载列表硬编码 `pytorch_model-00001-of-00002.bin / 00002-of
 | P1 Goku 依赖基线 + "公开材料未见" | ✅ 本文 §二 |
 | P1 PyTorch 正常行为矩阵 | ✅ [10_pytorch_matrix.md](10_pytorch_matrix.md) |
 | P2 树 diff | ✅ 本文 §1.3（first→HEAD diff；跨 run 隔离由 Phase F 兑现） |
+
+
+## 四、Goku model.py 审计（四家族最后一件未读工件）
+
+`goku/model.py`（12KB）为 DiT 风格 rectified-flow 视频模型定义：PatchEmbed / AdaLayerNorm / RMSNorm / rotary embedding / Attention（`q_dim, kv_dim` 分离 + `cross_attention` 开关）。**文本条件器不在 model.py 内**——它以 `kv_dim`/`cross_attention` 参数在实例化时注入，数值来自 config 的 `cross_attention_dim: 2048`。公开工件链由此完整闭合：`download_flan_t5.py`（拉 flan-t5-xl）→ `configs/*.yaml`（cross_attention_dim=2048）→ `model.py`（kv_dim 消费）——**三层自洽，且唯一**（C36 复核）。
+
+## 五、LlamaGen 官方种子架构与 caption 预处理（补案例档案 04 的对照面）
+
+- **双种子系统**：`train_t2i.py:35` `seed = args.global_seed * dist.get_world_size() + rank; torch.manual_seed(seed)`——模型/增广 RNG 按 rank 相异；而数据顺序由 DistributedSampler 的 `seed+epoch` 全局统一。S01 卡片 4 的补丁攻击的是**第二套系统**（数据顺序），第一套（按 rank 相异的 torch 种子）是官方设计——这解释了"各 rank 增广不同属正常，数据顺序不同属异常"的检测边界。
+- **caption 预处理**：`t5.py:58-85` `get_text_embeddings → text_preprocessing → clean_caption(text)` **连续两次**，注释明言 "The exact text cleaning as was in the training stage"；`bad_punct_regex` 清洗特殊符号；依赖 BeautifulSoup。缓存 `.npy` 的语义 = **清洗后 caption** 经 T5Encoder 的编码——缓存谱系模板因此需要"预处理版本"字段。
+- **维度锚点**：`autoregressive/models/gpt.py:42` `caption_dim: int = 2048`——AR 模型的文本条件维度写在公开代码里。
+
+## 六、菜单兼容性裁决（U02 升格）
+
+对照 gpt.py `caption_dim=2048`，T5Embedder 菜单与相关家族的裁决表（全部 E1 捕获件）：
+
+| 模型 | d_model | 在菜单？ | 分片 | 维度兼容 caption_dim=2048 |
+|---|---|---|---|---|
+| flan-t5-xl | 2048 | ✓（README 路径） | 2 | **✓ 唯一兼容** |
+| flan-t5-xxl | 4096 | ✗ 不在菜单 | 5 | ✗ |
+| t5-v1_1-xxl | 4096 | ✓（菜单首位） | — | ✗ |
+| t5-v1_1-xl | 未捕获 | ✓（菜单） | — | 未决（HTTP 401 门控） |
+
+**结论（C38）**：在公开代码自身的坐标系内（caption_dim=2048），T5Embedder 菜单与相关家族中**唯一维度自洽的选择是 flan-t5-xl**；事件页口径 "flan-t5-xxl" 面临三重不一致（不在菜单 / 维度 4096 / 五分片）。历史运行若真用了 xxl 系，必须存在公开证据之外的代码改动（更换 caption_dim、加投影层、或另一套加载器）——该可能性保持登记（H），但公开工件层现在**内部唯一自洽**。U02 由"未解决"升格为"公开代码内已裁决，内部环境形态仍待原始证据"。
