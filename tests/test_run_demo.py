@@ -45,9 +45,9 @@ class PhaseFAcceptanceTests(unittest.TestCase):
         with_fid = [l for l in lines if "fidelity" in l]
         dist = Counter(l["fidelity"] for l in with_fid)
         self.assertEqual(dist, Counter({"F2": 12, "F0": 8, "F1": 8, "F3": 4}))
-        # D33–D35 是交付层披露：按矩阵 F2 归档（混装检查——F3 只属于环境叙事层）
+        # F3（教学填充）按矩阵只属于：D19 领导目录位置 / D38 剔光集群 / D42 数据失配 / D43 通牒群
         f3_ids = {l["disclosure_id"] for l in lines if l.get("fidelity") == "F3"}
-        self.assertEqual(f3_ids, {"D31", "D36", "D37", "D38", "D39", "D42", "D43"})  # 环境叙事=F3
+        self.assertEqual(f3_ids, {"D19", "D38", "D42", "D43"})  # 与矩阵逐行一致
 
     def test_deterministic_two_runs(self):
         run("positive", "ut_det1")
