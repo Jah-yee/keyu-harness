@@ -1,0 +1,13 @@
+run_id,step,rank,loss,grad_norm,status
+baseline,0,0,1.0,0.42,ok
+baseline,0,1,1.01,0.41,ok
+baseline,1,0,0.92,0.39,ok
+baseline,1,1,0.93,0.4,ok
+baseline,2,0,0.85,0.37,ok
+baseline,2,1,0.86,0.36,ok
+synthetic_anomaly,0,0,1.0,0.42,ok
+synthetic_anomaly,0,1,1.01,0.41,ok
+synthetic_anomaly,1,0,0.91,0.39,ok
+synthetic_anomaly,1,1,6.8,4.9,ok
+synthetic_anomaly,2,0,0.87,0.38,ok
+synthetic_anomaly,2,1,7.2,5.3,ok

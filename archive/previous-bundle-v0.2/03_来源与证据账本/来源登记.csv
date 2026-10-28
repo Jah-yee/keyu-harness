@@ -1,0 +1,11 @@
+source_id,title,url,grade,what_it_supports,limits
+S01,事件整理页,https://keyu-tian-sabotage.github.io/,E4,事件页面公开叙述与代码摘录,摘录不是独立保全的原始Git对象或镜像
+S02,LlamaGen官方GitHub,https://github.com/FoundationVision/LlamaGen,E1,当前公开源码与README信息,当前main不等于2024年3月历史版本
+S03,LlamaGen论文,https://arxiv.org/abs/2406.06525,E1,论文方法与公开结果,不是事故训练日志
+S04,LlamaGen语言说明,https://github.com/FoundationVision/LlamaGen/blob/main/language/README.md,E1,当前T5相关说明,需固定历史commit
+S05,Goku官方GitHub,https://github.com/Saiyan-World/goku,E1,当前公开仓库结构,不能视作2024年内部源码
+S06,Goku论文,https://arxiv.org/abs/2502.04896,E1,2025年公开架构与系统描述,不能证明2024年实际运行配置
+S07,PyTorch版本表,https://github.com/pytorch/pytorch/wiki/PyTorch-Versions,E1,公开版本发布时间,不能证明涉事环境版本
+S08,FLAN-T5-XL配置,https://huggingface.co/google/flan-t5-xl/blob/main/config.json,E1,当前公开模型配置参数,不能证明涉事权重身份
+S09,FLAN-T5-XXL配置,https://huggingface.co/google/flan-t5-xxl/blob/main/config.json,E1,当前公开模型配置参数,不能证明涉事权重身份
+S10,elsewhere后续调查说明,https://elsewhere.news/zh/elsewhere/tian-keyu-incident-investigation-01,E3/E4,出版方后续说明和来源核验限制,不是原始内部工件

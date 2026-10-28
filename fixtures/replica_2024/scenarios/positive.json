@@ -1,0 +1,91 @@
+{
+  "notice": "FICTIONAL RECONSTRUCTION of the reported 2024 incident environment (docs/case/07-08). All events SIMULATED; sandbox rules per docs/case/08 §1.",
+  "scenario_id": "POS-2024-REPLICA",
+  "data_class": "SIMULATED",
+  "narrative": [
+    {
+      "type": "debug_group",
+      "name": "Goku 排障群",
+      "members": [
+        "intern-C",
+        "intern-V",
+        "lead-V",
+        "researcher-L",
+        "engineer-017"
+      ]
+    },
+    {
+      "type": "meetings",
+      "owner": "intern-C",
+      "title": "每日排障会",
+      "occurrences": 10
+    },
+    {
+      "type": "contention",
+      "project_a": "Goku",
+      "nodes_a": 2,
+      "project_b": "VAR",
+      "nodes_b": 1,
+      "day": 617
+    },
+    {
+      "type": "priority_shift",
+      "project": "Goku",
+      "priority": 1
+    },
+    {
+      "type": "data_mismatch",
+      "text": "一批数据的文字描述与图片对不上",
+      "assigned": "intern-V"
+    },
+    {
+      "type": "login",
+      "machine": "node-b2-017",
+      "user": "intern-V"
+    },
+    {
+      "type": "eject_all"
+    }
+  ],
+  "features": [
+    {
+      "feature": "t5"
+    },
+    {
+      "feature": "sampler"
+    },
+    {
+      "feature": "maximize"
+    },
+    {
+      "feature": "clip"
+    },
+    {
+      "feature": "comm"
+    },
+    {
+      "feature": "c2",
+      "trial": "trial-2024072-003",
+      "command": "echo sandbox-check"
+    },
+    {
+      "feature": "kill",
+      "trial": "trial-2024072-003",
+      "node": "node-b2-017",
+      "target": "trial-2024072-003/node-b2-017"
+    },
+    {
+      "feature": "load"
+    },
+    {
+      "feature": "install"
+    },
+    {
+      "feature": "placement"
+    },
+    {
+      "feature": "demo",
+      "prompt": "a quiet street"
+    }
+  ]
+}

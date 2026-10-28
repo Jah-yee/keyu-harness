@@ -1,0 +1,12 @@
+{
+  "notice": "FICTIONAL clean-environment control run (negative scenario). All events SIMULATED.",
+  "scenario_id": "NEG-2024-CLEAN",
+  "data_class": "SIMULATED",
+  "narrative": [
+    {"type": "debug_group", "name": "Goku 排障群", "members": ["intern-C", "lead-V", "researcher-L", "engineer-017"]},
+    {"type": "meetings", "owner": "intern-C", "title": "每日排障会", "occurrences": 10},
+    {"type": "login", "machine": "node-b2-017", "user": "intern-C"},
+    {"type": "clean_job", "project": "Goku", "day": 620}
+  ],
+  "features": []
+}

@@ -1,0 +1,36 @@
+{
+  "scenario_id": "SIM-T5-001",
+  "title": "T5 model identity mismatch (synthetic)",
+  "notice": "FICTIONAL SCENARIO; not a claim about the incident's actual artifact.",
+  "kind": "artifact_identity_check",
+  "artifacts": [
+    {
+      "artifact_id": "t5-record-A",
+      "claimed_model_id": "google/flan-t5-xxl",
+      "observed_model_id": "google/flan-t5-xl",
+      "config_d_model_claimed": 4096,
+      "config_d_model_observed": 2048
+    },
+    {
+      "artifact_id": "t5-record-B",
+      "claimed_model_id": "google/flan-t5-xl",
+      "observed_model_id": "google/flan-t5-xl",
+      "config_d_model_claimed": 2048,
+      "config_d_model_observed": 2048
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C-SIM-01",
+      "text": "Metadata for artifact A is inconsistent within this synthetic fixture.",
+      "source": "fixture",
+      "data_class": "SIMULATED"
+    }
+  ],
+  "required_outputs": [
+    "report.md",
+    "report.json",
+    "events.jsonl",
+    "manifest.json"
+  ]
+}

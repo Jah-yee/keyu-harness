@@ -1,0 +1,535 @@
+{
+  "captured_at": "2026-10-27T20:16:54+00:00",
+  "repo": "FoundationVision/LlamaGen",
+  "ref": "5a50452db783a1351073a42eab4cac4eda80f618",
+  "commit": "5a50452db783a1351073a42eab4cac4eda80f618",
+  "file_count": 105,
+  "total_bytes": 7384620,
+  "files": [
+    {
+      "path": ".gitignore",
+      "size_bytes": 3139,
+      "sha256": "1674ac8ed7488af605be80c1f3a20bc1f4c2b47b8549346722948385ffc87e8c"
+    },
+    {
+      "path": "GETTING_STARTED.md",
+      "size_bytes": 3299,
+      "sha256": "e8f795b399597cbe1cd9eebd60dc4e8cc1a94e7c70790a1afbdd3840668d2395"
+    },
+    {
+      "path": "LICENSE",
+      "size_bytes": 1073,
+      "sha256": "793789b0aaa4d2b0bfd2a5d288bf5f95622d6fa2a5285f358ec9d101b50dbbcb"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 6223,
+      "sha256": "8051cf825570c727ace59dcaecd9c6da6bf2edf151df3bccd5f6580277ac221f"
+    },
+    {
+      "path": "app.py",
+      "size_bytes": 6582,
+      "sha256": "548e689b5adf5b25fb2c6fbeada6a9f5694d37d977f03dcd88e70850c14b0b48"
+    },
+    {
+      "path": "assets/teaser.jpg",
+      "size_bytes": 5057479,
+      "sha256": "7c35929e7495148f438510a825b9768835f08b8b7cd4142fa9afb2306fe12aeb"
+    },
+    {
+      "path": "autoregressive/models/generate.py",
+      "size_bytes": 7910,
+      "sha256": "512bd8bf9b10977d7276d79c0679f52bf4a578ad3ce20a2137b374067176fb2d"
+    },
+    {
+      "path": "autoregressive/models/gpt.py",
+      "size_bytes": 19663,
+      "sha256": "7397395d8a42eb01fb6f1a30a9b42e915c334cba011a19b2d6f9a2e4f4e6cd8e"
+    },
+    {
+      "path": "autoregressive/sample/sample_c2i.py",
+      "size_bytes": 5635,
+      "sha256": "5db1fd735f8287c7d003855bae9178f91f9ed2e7c8d181621550ec8a81840008"
+    },
+    {
+      "path": "autoregressive/sample/sample_c2i_ddp.py",
+      "size_bytes": 8789,
+      "sha256": "560b217a9f97b48bb8b292425ed4a905c0e779a4f673195d4175c27c9418111e"
+    },
+    {
+      "path": "autoregressive/sample/sample_t2i.py",
+      "size_bytes": 7159,
+      "sha256": "16f6dc0fe9ab7555117d4ea7523486a98fe2becbda25258f8d57285b601f0487"
+    },
+    {
+      "path": "autoregressive/sample/sample_t2i_ddp.py",
+      "size_bytes": 10676,
+      "sha256": "3fcdac175875778c22c12214177d105e8163cbee4ddb4a531d8921148787db64"
+    },
+    {
+      "path": "autoregressive/serve/README.md",
+      "size_bytes": 2047,
+      "sha256": "e9b0b9301b93795cf56436de1f430420f7df82e17139e4045d9bf368d65206f8"
+    },
+    {
+      "path": "autoregressive/serve/fake_json/GPT-B.json",
+      "size_bytes": 652,
+      "sha256": "64a31ba29edca745b5a282b44ec42faa52bb56c605d0e818b07aa3682236dfde"
+    },
+    {
+      "path": "autoregressive/serve/fake_json/GPT-L.json",
+      "size_bytes": 653,
+      "sha256": "2fc7108f447998da892a0a536a8b55edcd80c67a95c082e5684b2a5a56d37939"
+    },
+    {
+      "path": "autoregressive/serve/fake_json/GPT-XL.json",
+      "size_bytes": 653,
+      "sha256": "d9a6614925aac24c0064277149d29c9b430ea370cade0156a63d2966dec94c9a"
+    },
+    {
+      "path": "autoregressive/serve/fake_json/GPT-XXL.json",
+      "size_bytes": 653,
+      "sha256": "a52d435092a53ed8d94445e47a0abb868363b367170f328a204a2368e2ef713d"
+    },
+    {
+      "path": "autoregressive/serve/gpt_model.py",
+      "size_bytes": 14879,
+      "sha256": "962ef9ffca24cb7b1c7d759d668aa3ca2556b4abb36dbb867f80371950d000fe"
+    },
+    {
+      "path": "autoregressive/serve/gpu_executor.py",
+      "size_bytes": 7809,
+      "sha256": "1caeeda86b0f630b479240dd618f3bfbabf773d0358f383779eed922e7c1c1a3"
+    },
+    {
+      "path": "autoregressive/serve/llm.py",
+      "size_bytes": 12277,
+      "sha256": "39bb8d6e459101955b7f990a58aaf4bfb482c9386020ca571031d2ce5e3a71bf"
+    },
+    {
+      "path": "autoregressive/serve/llm_engine.py",
+      "size_bytes": 28754,
+      "sha256": "4671894f576e2818cd202c5328d4199d0e28dd67b683d85ded29c468cd7ff19c"
+    },
+    {
+      "path": "autoregressive/serve/model_runner.py",
+      "size_bytes": 52906,
+      "sha256": "7c0d7768c6b4704360958b023c54a1ca4007f8a9a53c9709f4c45f6ecf4e4bc1"
+    },
+    {
+      "path": "autoregressive/serve/sample_c2i.py",
+      "size_bytes": 4681,
+      "sha256": "ae2f79243a7e73df130a979b3db4102fcb1015420209221600d9aa2df0ff0c88"
+    },
+    {
+      "path": "autoregressive/serve/sampler.py",
+      "size_bytes": 37923,
+      "sha256": "5cd35c50245a2f50d5e19ec5d39ceb7b33213f84abd80472fcd33cf2940b534a"
+    },
+    {
+      "path": "autoregressive/serve/worker.py",
+      "size_bytes": 14776,
+      "sha256": "89e29e133a9fb4390e8fb6f6df1ae580873216e85d97f664bd247ab3abde4253"
+    },
+    {
+      "path": "autoregressive/train/extract_codes_c2i.py",
+      "size_bytes": 5639,
+      "sha256": "91c76bd31fe3c4858961193e3ece0d78e53da3da8ce7fe56816987c0067c586f"
+    },
+    {
+      "path": "autoregressive/train/extract_codes_t2i.py",
+      "size_bytes": 5607,
+      "sha256": "38f0739f04150be7d4bfed303e77f5cc3126849406940eb318f9d5a331a414fb"
+    },
+    {
+      "path": "autoregressive/train/train_c2i.py",
+      "size_bytes": 14777,
+      "sha256": "8cf2fd6bf94ff96ab9e92f272327d2e70ce3a003a96c6aa8630eaf33dd114ea5"
+    },
+    {
+      "path": "autoregressive/train/train_c2i_fsdp.py",
+      "size_bytes": 18123,
+      "sha256": "d709bc16cc4161f96406daa7d5dd11be8fb95e15e6cddf10f62928e47c850449"
+    },
+    {
+      "path": "autoregressive/train/train_t2i.py",
+      "size_bytes": 13133,
+      "sha256": "56144b7cac2970406dd7e8eb8f10a3e8e50b51e215ef008afb383b9a269b883a"
+    },
+    {
+      "path": "dataset/augmentation.py",
+      "size_bytes": 2077,
+      "sha256": "9d10b12c008aee8a3c47df490cc6aefb73e9f15b0a01a32a9df038cc90e2f350"
+    },
+    {
+      "path": "dataset/build.py",
+      "size_bytes": 1013,
+      "sha256": "94f460a7af6dff80c3e2a75136c7b1029e01e81cf361f88c58d8b7343ee5d4b7"
+    },
+    {
+      "path": "dataset/coco.py",
+      "size_bytes": 853,
+      "sha256": "2f571ca3d94ff333ebe38902e7502210cc8106bcae83cb57232d09e748bd8458"
+    },
+    {
+      "path": "dataset/imagenet.py",
+      "size_bytes": 2451,
+      "sha256": "9ff826b447c21698bfb33db1613adab6e653ddafde5043c2faefa8dd395d277a"
+    },
+    {
+      "path": "dataset/openimage.py",
+      "size_bytes": 1309,
+      "sha256": "c0c8a6c81c081418c1d73c50892d468d12d7b6f320a3db8da7df048b25c07743"
+    },
+    {
+      "path": "dataset/pexels.py",
+      "size_bytes": 140,
+      "sha256": "a7cbaa5d96c049af023a8952ad33105e598033f8fbd178f400d21e80bd5d1066"
+    },
+    {
+      "path": "dataset/t2i.py",
+      "size_bytes": 6076,
+      "sha256": "a7be192830cf5fc2bed4a7e161855a573cd8512b580a9a3cb5d7772d57da35b2"
+    },
+    {
+      "path": "evaluations/c2i/README.md",
+      "size_bytes": 7477,
+      "sha256": "ed8035008e40035c8e64f7f69219acda61fff2046127d3335fa1405c40d21be6"
+    },
+    {
+      "path": "evaluations/c2i/evaluator.py",
+      "size_bytes": 25431,
+      "sha256": "483505b003c27abb23774928cd0b123e0a1da5d178b7b9a83e33834815f1a17d"
+    },
+    {
+      "path": "evaluations/t2i/PartiPrompts.tsv",
+      "size_bytes": 123107,
+      "sha256": "fab29e41bb512a169b56acab4cf2a41dcb675e285df2efcde6640c7dd3c440eb"
+    },
+    {
+      "path": "evaluations/t2i/README.md",
+      "size_bytes": 453,
+      "sha256": "71e54ccbb311c7924cf41969d53c4481e7f5a7aa73e02432db3a947f5cef5845"
+    },
+    {
+      "path": "evaluations/t2i/coco_captions.csv",
+      "size_bytes": 1595024,
+      "sha256": "716e8ab3703f1a987cc5068f9be5def6104dbe21e943708005beec426feb3ac5"
+    },
+    {
+      "path": "evaluations/t2i/evaluation.py",
+      "size_bytes": 10054,
+      "sha256": "1093267c4e9bf0415e76afd4544f1eee0107c3086f39b00bf0225f06b328b8d3"
+    },
+    {
+      "path": "language/README.md",
+      "size_bytes": 375,
+      "sha256": "0acc1b3ca5f99a5861e56d18623cb0c8b75fb855eb71747d938edce03e848851"
+    },
+    {
+      "path": "language/extract_t5_feature.py",
+      "size_bytes": 5041,
+      "sha256": "c930d45164aaf583c2f4338ac6826227a836c2a73bac65d1e7b90231ac47a3c7"
+    },
+    {
+      "path": "language/t5.py",
+      "size_bytes": 8774,
+      "sha256": "f8691193caeddf08ecfc35694e24160c608b5cd5516f7ae0f0dfd9a9da564289"
+    },
+    {
+      "path": "requirements.txt",
+      "size_bytes": 13,
+      "sha256": "148a1f7aa79540a3286f90fb6561808051dd74d6a336927e868383cd8a3c03be"
+    },
+    {
+      "path": "scripts/autoregressive/extract_codes_c2i.sh",
+      "size_bytes": 147,
+      "sha256": "d1a3e7383bd8840c53644866b4d65ac8a54166bc7b7485c62c0f57881658d1db"
+    },
+    {
+      "path": "scripts/autoregressive/sample_c2i.sh",
+      "size_bytes": 194,
+      "sha256": "5a255b69f90472dd451eacfd6132c990260cf4e70cfa1efcfa15ab0393bc2034"
+    },
+    {
+      "path": "scripts/autoregressive/sample_t2i_coco.sh",
+      "size_bytes": 271,
+      "sha256": "3a994851c2513c48957914f02c58bd08047d8df931699b7faa137312da4d8bf5"
+    },
+    {
+      "path": "scripts/autoregressive/sample_t2i_parti.sh",
+      "size_bytes": 271,
+      "sha256": "e278763f0dc273fe239834a17c0cf7ef785b35adb4e144191fbc9365bcdeab6c"
+    },
+    {
+      "path": "scripts/autoregressive/train_c2i.sh",
+      "size_bytes": 202,
+      "sha256": "c5afa6c076934075d8bb1d86da7b95db2ddd32ed69d839f27502ac6d86a31b5c"
+    },
+    {
+      "path": "scripts/autoregressive/train_c2i_fsdp.sh",
+      "size_bytes": 207,
+      "sha256": "811ede408137b3ab4673f71ad8fddc5e4ee59d5638033d41c5554326ed4be7c3"
+    },
+    {
+      "path": "scripts/autoregressive/train_t2i_stage1.sh",
+      "size_bytes": 374,
+      "sha256": "2b59572480ba8095f4492b323da3abf465d7ea7362567f66d879e270e04b83d0"
+    },
+    {
+      "path": "scripts/autoregressive/train_t2i_stage2.sh",
+      "size_bytes": 452,
+      "sha256": "a9aaacb4c1d03229f03210230b2882ed1b4f0c8c71f9eb6a6723c064ff1b0b1c"
+    },
+    {
+      "path": "scripts/language/extract_flan_t5_feat_laion_coco_stage1.sh",
+      "size_bytes": 242,
+      "sha256": "62eda595132f8af423caa03e6e9f9478bdae7603e23dce1680099897f2aabdc7"
+    },
+    {
+      "path": "scripts/language/extract_flan_t5_feat_stage2.sh",
+      "size_bytes": 231,
+      "sha256": "d9017254c8e4fc2533a8f33d79e414d258700fa1ba4a2bb02b7835c661f650ed"
+    },
+    {
+      "path": "scripts/language/extract_flan_t5_feat_trunc_stage2.sh",
+      "size_bytes": 255,
+      "sha256": "6a4644d845acfd785724861105f360d6a2ee0bcb58d3e6503299ac963206f9b7"
+    },
+    {
+      "path": "scripts/tokenizer/reconstruction_consistency_decoder.sh",
+      "size_bytes": 160,
+      "sha256": "28e5b5ab3cd4b9ca10feeb4e46446d5c1f66294512bc29d8067e3a2c2e1721ad"
+    },
+    {
+      "path": "scripts/tokenizer/reconstruction_vae.sh",
+      "size_bytes": 146,
+      "sha256": "8b05ff7d98f86c32e91c3f88144c8294dde3f17c17f38e852fdc4870278149e0"
+    },
+    {
+      "path": "scripts/tokenizer/reconstruction_vq.sh",
+      "size_bytes": 157,
+      "sha256": "ca33165267303d94c4b10a77b09f9d6860f5d88bdf8a5688af47cdc3e1839bc1"
+    },
+    {
+      "path": "scripts/tokenizer/reconstruction_vqgan.sh",
+      "size_bytes": 150,
+      "sha256": "6b6540474502735436c34852f7e64526ea9befb94079ce491b3a91cb3f30cc60"
+    },
+    {
+      "path": "scripts/tokenizer/train_vq.sh",
+      "size_bytes": 205,
+      "sha256": "88028cb8e339d801f621106ee2e95956402f0eaa6bd13793f00a176189ee2c3c"
+    },
+    {
+      "path": "scripts/tokenizer/train_vq_finetune.sh",
+      "size_bytes": 424,
+      "sha256": "e7f74bfa77654ebbfff5c5192a4c00176eaef6bf705b2e3681ba0ff3c4946d8f"
+    },
+    {
+      "path": "scripts/tokenizer/train_vq_finetune_continue.sh",
+      "size_bytes": 384,
+      "sha256": "20fce44e9bc1fcea52ca9edcf3b82d1e409350c33077abaf390d057665232fae"
+    },
+    {
+      "path": "scripts/tokenizer/val.sh",
+      "size_bytes": 138,
+      "sha256": "79aa4b285cdd958ed826a0bf77b2d9099231a5639162c38217c8d4eaa155ad88"
+    },
+    {
+      "path": "tokenizer/consistencydecoder/README.md",
+      "size_bytes": 189,
+      "sha256": "8456ddb46c58affb4e20a110264a580064a6e0c4e7b07134fa0bd7dcdbdd7275"
+    },
+    {
+      "path": "tokenizer/consistencydecoder/cd_demo.py",
+      "size_bytes": 1972,
+      "sha256": "537264a21030ccc10ab2cd810fef0f98218d3b4f44a8a808edf84ec334249e39"
+    },
+    {
+      "path": "tokenizer/consistencydecoder/reconstruction_cd_ddp.py",
+      "size_bytes": 8272,
+      "sha256": "734ff1dd4b60d3b160eab717296908b2723592bb396c834ead494b683e8170ba"
+    },
+    {
+      "path": "tokenizer/tokenizer_image/cache/vgg.pth",
+      "size_bytes": 7289,
+      "sha256": "a78928a0af1e5f0fcb1f3b9e8f8c3a2a5a3de244d830ad5c1feddc79b8432868"
+    },
+    {
+      "path": "tokenizer/tokenizer_image/discriminator.py",
+      "size_bytes": 8693,
+      "sha256": "e32b414c223c5a4690f348b94b3d3c41ef06398e574ee041a5c162acf88753ac"
+    },
+    {
+      "path": "tokenizer/tokenizer_image/discriminator_patchgan.py",
+      "size_bytes": 5277,
+      "sha256": "699ded469cf94cff1511d1d9cfb77fe370f153c5186ba3f77d23a3facc2cc203"
+    },
+    {
+      "path": "tokenizer/tokenizer_image/discriminator_stylegan.py",
+      "size_bytes": 3083,
+      "sha256": "e34bd77b49e806619eb328dc83892740a15845329b10156845d1451e88515350"
+    },
+    {
+      "path": "tokenizer/tokenizer_image/lpips.py",
+      "size_bytes": 6208,
+      "sha256": "6506c70faa245f2f1c73ee2835ef8d916cfc674dad690a764dec73424b1cd82c"
+    },
+    {
+      "path": "tokenizer/tokenizer_image/reconstruction_vq_ddp.py",
+      "size_bytes": 8134,
+      "sha256": "445ebc35e1c9245521af9df145450864a3aef92ca9a7484d2abadf6d4a1104f5"
+    },
+    {
+      "path": "tokenizer/tokenizer_image/vq_demo.py",
+      "size_bytes": 3312,
+      "sha256": "a4790e5d99f180772c4eb2d37b128ef9996d57180c899f1a437a5a6b5e31fb2d"
+    },
+    {
+      "path": "tokenizer/tokenizer_image/vq_loss.py",
+      "size_bytes": 7518,
+      "sha256": "854cf1f223264e1bb03c58bebda76bc7d31e2731821f0c3a370e1a8980f96030"
+    },
+    {
+      "path": "tokenizer/tokenizer_image/vq_model.py",
+      "size_bytes": 15976,
+      "sha256": "df5ed216f678dc2b7541389dcdd6098309f0f8efe0073a815415d24c9e8f59cf"
+    },
+    {
+      "path": "tokenizer/tokenizer_image/vq_train.py",
+      "size_bytes": 16072,
+      "sha256": "8496b1707f9e10f14034a25a3171cfc1adceb751df1813cdd0cf4272f3f6120f"
+    },
+    {
+      "path": "tokenizer/vae/README.md",
+      "size_bytes": 179,
+      "sha256": "44c966613597663bb117cdb8472b43f976368d83a41612be7a341e35b1e4f201"
+    },
+    {
+      "path": "tokenizer/vae/reconstruction_vae_ddp.py",
+      "size_bytes": 8288,
+      "sha256": "dad4995bf2a5d556355973202902f8c6ae4035f3cca35277d1ae3fcb0fa0e358"
+    },
+    {
+      "path": "tokenizer/vae/sd_vae_demo.py",
+      "size_bytes": 2042,
+      "sha256": "220f2cb3449e17b3fa4f96e42b4f7ddbcee7fcdd05bb7f87835718b6de710ba9"
+    },
+    {
+      "path": "tokenizer/validation/val_ddp.py",
+      "size_bytes": 6025,
+      "sha256": "0f900370696c1f4eb8326e373329663be65026feda41916314144b1da8b761f8"
+    },
+    {
+      "path": "tokenizer/vqgan/README.md",
+      "size_bytes": 513,
+      "sha256": "d838eda27a444a37782b2af9aec46bdb9b5dda5710e06212f5419a901655f396"
+    },
+    {
+      "path": "tokenizer/vqgan/configs/vqgan_imagenet_f16_1024.yaml",
+      "size_bytes": 645,
+      "sha256": "cbd6fa371d07bf5bb960e32186e6e81356accbefdcc722bf94583b6a98bda00c"
+    },
+    {
+      "path": "tokenizer/vqgan/configs/vqgan_imagenet_f16_16384.yaml",
+      "size_bytes": 692,
+      "sha256": "00e2c6189926f1d89ecfef73e9598db77981c1982f0555fbade963ffd16143c7"
+    },
+    {
+      "path": "tokenizer/vqgan/configs/vqgan_openimage_f8_16384.yaml",
+      "size_bytes": 314,
+      "sha256": "16edd8adc6646bb08ada92185d481a6659d8278a61b37d8891dd23894ae6759e"
+    },
+    {
+      "path": "tokenizer/vqgan/configs/vqgan_openimage_f8_256.yaml",
+      "size_bytes": 312,
+      "sha256": "25ed38de82451d1e52a81030885f9afc4171c7518c8955b2b6d96388afc238d7"
+    },
+    {
+      "path": "tokenizer/vqgan/layer.py",
+      "size_bytes": 13787,
+      "sha256": "6e13228cfc0017b607b2ad37fd25df5a0072306a6b152b7de2d1c71d4af89b3b"
+    },
+    {
+      "path": "tokenizer/vqgan/model.py",
+      "size_bytes": 3456,
+      "sha256": "7cd54fe265ffa8f497870d4ecdd22108ef0797086172a3f95b084355a7445c3c"
+    },
+    {
+      "path": "tokenizer/vqgan/quantize.py",
+      "size_bytes": 9217,
+      "sha256": "9b09779fdf1d74df59f67f9807f5c07c9ec77e8d658ee56d303a2cafdffc706c"
+    },
+    {
+      "path": "tokenizer/vqgan/reconstruction_vqgan_ddp.py",
+      "size_bytes": 8430,
+      "sha256": "9ec52790ffe40887523553aaaaeb393f150375f67b7e8a1913b71df8a8a65f30"
+    },
+    {
+      "path": "tokenizer/vqgan/taming_vqgan_demo.py",
+      "size_bytes": 2466,
+      "sha256": "43181581bf50ce5c57eb0f24c074eee0185f8d6e1fa9d92bcf339357f0364c57"
+    },
+    {
+      "path": "tools/check_image_codes.py",
+      "size_bytes": 2232,
+      "sha256": "36b0e79ad8171bef1c7704c2728a51c9d4c229b154bcdaf71d498b0f7ff37320"
+    },
+    {
+      "path": "tools/convert_pytorch_lightning_to_torch.py",
+      "size_bytes": 686,
+      "sha256": "77244112fde7c7717a4fa2cea34c7ee0d44cd9bd7bf15b7e8fe517996e473f99"
+    },
+    {
+      "path": "tools/draw_figure.py",
+      "size_bytes": 4993,
+      "sha256": "d01bdc39f5eb78979440d38c1916b45a0b6d85ea267d3ce5af1c0759def8f3c0"
+    },
+    {
+      "path": "tools/imagenet_en_cn.py",
+      "size_bytes": 45900,
+      "sha256": "f9b1c550439371bc7d4855e4f3d05fec2c078a4a6595c7eedf2e75ae728424ff"
+    },
+    {
+      "path": "tools/openimage_json.py",
+      "size_bytes": 2488,
+      "sha256": "c156311184446f1538b256b85296e9f7a6aea6ecd8ee700dcbaea16ce54623d0"
+    },
+    {
+      "path": "utils/data.py",
+      "size_bytes": 827,
+      "sha256": "6b8fb0c7d5ef2e08a7615b76ae601d4846fce53cd9eb7f31f3ad9a616f979125"
+    },
+    {
+      "path": "utils/deepspeed.py",
+      "size_bytes": 2753,
+      "sha256": "62f684a34106be3f3814df5194a5059ea690a45ca681be46dd9d3797a268189f"
+    },
+    {
+      "path": "utils/distributed.py",
+      "size_bytes": 2093,
+      "sha256": "7f4095ae8272e14128371cc8b6970fcf69e482ae8c1fa7d7248d35b3d02072fc"
+    },
+    {
+      "path": "utils/drop_path.py",
+      "size_bytes": 1594,
+      "sha256": "92c2281eeb035318df14806170ad02dc0c8b01c0034d9a8e6b3e21e75d27e489"
+    },
+    {
+      "path": "utils/ema.py",
+      "size_bytes": 703,
+      "sha256": "1c5fcfaf593b28b8900ef47a9a809531b20780e931e5497db19035f3d79039d1"
+    },
+    {
+      "path": "utils/logger.py",
+      "size_bytes": 665,
+      "sha256": "6d14c043ca2757cfa8b2cf2b5d516c413fede1f8895f21f807b347cb3a9a34bb"
+    },
+    {
+      "path": "utils/video.py",
+      "size_bytes": 3478,
+      "sha256": "e118c1c021cf5dfddc8b8a434c5f233bce466fcf317a3133ea5d0c19f184a0a5"
+    }
+  ]
+}

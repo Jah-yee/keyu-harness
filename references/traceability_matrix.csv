@@ -1,0 +1,45 @@
+﻿disclosure_id,category,disclosure,source,fidelity,module,trigger,expected_symptom,detection,evidence_grade,status
+D01,特性01,adam系 maximize=True 强制最大化损失,S01,F0,harness/sim_optimizer.py,训练启动时改写param_groups,loss反向上升,参数快照+方向断言,REPORTED,implemented
+D02,特性01,adamw2 按rank取模只改部分副本,S01,F1,harness/sim_optimizer.py,按 rank%k 条件,梯度同步仍发散,跨rank轨迹对比,REPORTED,implemented
+D03,特性02,clip_grad 系数×2 且返回原norm,S01,F0,harness/sim_clip.py,每次clip调用,日志norm与实际脱节,双路范数对账,REPORTED,implemented
+D04,特性02,附带关闭Flash/TF32/调精度,S01,F2,harness/sim_envflags.py,环境初始化,变慢+显存变化,数值路径指纹,REPORTED,implemented
+D05,特性03,以2^-18~2^-21概率跳过集合通信,S01,F1,harness/sim_comm.py,collective调用时,卡死/超时/结果错乱,参与度审计,REPORTED,implemented
+D06,特性03,种子取自纳秒时间与对象地址,S01,F1,harness/sim_comm.py,同上,几乎无法复现,跨运行复现校验,REPORTED,implemented
+D07,特性04,sampler种子换 time_ns,S01,F0,harness/sim_sampler.py,epoch迭代,排列互异/不可复现,跨rank一致性,REPORTED,implemented
+D08,特性05,wait.py 轮询共享盘执行命令回写,S01,F2,harness/sim_c2.py,轮询周期,白名单命令在沙箱内执行并回写,访问模式审计,REPORTED,implemented
+D09,特性05,命令通道按rank取模仅个别进程生效,S01,F2,harness/sim_c2.py,rank%k 条件,个别进程行为差异,参与度审计,REPORTED,implemented
+D10,特性05,barrier_vgpt/<trial>/in.<id> 路径模式,S01,F1,harness/sim_c2.py,轮询,in.<id>文件被消费,路径模式告警,REPORTED,implemented
+D11,特性06,kill.py pkill torchrun/python,S01,F2,harness/sim_kill.py,指定TRIAL/NODE,本demo子进程退出/作业卡死,退出原因审计,REPORTED,implemented
+D12,特性06,写入init.py随训练启动触发,S01,F2,harness/sim_kill.py,安装阶段,下次启动自动执行,启动脚本完整性,REPORTED,implemented
+D13,特性07,nonan 加载checkpoint时NaN清零,S01,F0,harness/sim_load.py,checkpoint加载,报错消失/统计异常,张量统计对比,REPORTED,implemented
+D14,特性08,os.utime 还原mtime/atime,S01,F0,harness/sim_install.py,替换文件后,mtime无辜/ctime异常,mtime-ctime交叉,REPORTED,implemented
+D15,特性08,sudo替换已安装torch文件+属主权限,S01,F2,harness/sim_install.py,安装阶段,site-packages_sim内文件替换,模块哈希vs清单,REPORTED,implemented
+D16,特性00,modify_t5 范数保持噪声（前传）,S01,F0,harness/sim_t5.py,特征生成,训练正常/模型无用,逐tensor哈希,REPORTED,implemented
+D17,特性00,T5文件作载体读目录执行+机器后门,S10,F2,harness/sim_t5.py,模型加载,每次启动交付,加载哈希门,REPORTED,implemented
+D18,散布,打窝：个人目录.temp隐藏文件夹,S01/S10,F2,env/placement.py,部署阶段,27文件分布,跨目录同哈希关联,REPORTED,implemented
+D19,散布,打窝：直属领导目录名下,S10,F3,env/placement.py,部署阶段,文件分布,跨目录同哈希关联,REPORTED,implemented
+D20,散布,打窝：日志文件内藏码,S10,F2,env/storage.py,部署阶段,日志内嵌代码段,日志完整性校验,REPORTED,implemented
+D21,散布,文件实时删除,S10,F2,env/storage.py,被发现后,文件消失,存储操作审计,REPORTED,implemented
+D22,散布,存储操作记录恢复更多代码,S10,F2,env/storage.py,审计触发,恢复出删除项,操作审计回放,REPORTED,implemented
+D23,反取证,多处修改挤同一行不增行数,S10,F2,harness/sim_install.py same_line_patch,补丁时,traceback不显眼,补丁行数审计,REPORTED,implemented
+D24,反取证,日志自动删除故障特定行,S10,F2,harness/sim_logfilter.py,日志写入,故障行缺失,双路日志diff,REPORTED,implemented
+D25,反取证,替换系统检查工具,S10,F2,harness/sim_toolswap.py,巡检调用,工具输出失真,工具哈希带外,REPORTED,implemented
+D26,反取证,隐藏运行中的攻击进程,S10,F2,harness/sim_hideproc.py,进程枚举,进程不可见,带外枚举,REPORTED,implemented
+D27,触发,GPU数量门槛,S10,F2,harness/sim_triggers.py,作业规模检查,大规模才触发,触发参数审计,REPORTED,implemented
+D28,触发,触发概率随版本调整/连续性,S10,F2,harness/sim_triggers.py,版本切换,概率变化,概率配置审计,REPORTED,implemented
+D29,取证史,mtime纳秒级差异被人工发现,S10,F1,detect/recipes.py mtime_ctime_cross,人工比对,发现疑点,mtime-ctime交叉,REPORTED,implemented
+D30,取证史,确定性装置16位小数失效→抓到sampler,S10,F1,train/mini_loop.py DetHarness,每step校验,定位sampler,跨rank一致性,REPORTED,implemented
+D31,取证史,登录记录唯一非管理员=田,S10,F3,env/authlog.py,登录事件,异常登录记录,登录审计,REPORTED,implemented
+D32,取证史,机器粘性跨任务存活（Robust Training）,S01a,F2,env/stickiness.py,任务重启,修改持续生效,启动哈希vs清单,REPORTED,implemented
+D33,特性09,Demo实为PixArt-α,S01,F2,harness/sim_demo.py,请求处理,输出来自替代模型,哈希绑定+身份回显,REPORTED,implemented
+D34,特性09,City前缀防同题对比,S01,F0,harness/sim_demo.py,prompt处理,同题不可对比,prompt审计,REPORTED,implemented
+D35,特性09,推理Pipeline打包二进制切断provenance,S01,F2,harness/sim_demo.py,交付,部署无法检查,交付登记,REPORTED,implemented
+D36,环境,飞书会议混入（旧链接+日历入口）,S10,F2,env/feishu_sim.py,会议开始,攻击者在会,日历权限审计,REPORTED,implemented
+D37,环境,共享资源池无配额VAR/Goku争用,S10,F3,env/scheduler.py,调度,资源摩擦,配额审计,REPORTED,implemented
+D38,环境,Infra剔机机制曾剔光全集群,S10,F3,env/ejector.py,异常检测,全集群剔除,(背景事件),REPORTED,implemented
+D39,环境,Var/Goku/LlamaGen三项目共组,S10,F3,env/scheduler.py,调度,互相影响,(背景事件),REPORTED,implemented
+D40,命名考古,raw_*备份与py9_*/39变体族,S01,F3,harness/sim_install.py raw_备份,部署,多环境变体,(命名考古),REPORTED,implemented
+D41,命名考古,__pycache__证明模块被import,S01,F1,harness/sim_pycache.py,执行,执行证据,(物证复现),REPORTED,implemented
+D42,背景,数据失配事件/田被撤数据职责,S10,F3,run_demo.py data_mismatch 叙事,5月,(背景),(叙事),REPORTED,implemented
+D43,背景,两周最后通牒/上百人排障群两会,S10,F3,env/feishu_sim.py,持续,排障负载,(叙事),REPORTED,implemented
+D44,背景,确定性系统覆盖全随机性(数据读序基础),S10,F1,train/mini_loop.py DetHarness,每step,复现校验,(即配方30),REPORTED,implemented

@@ -1,0 +1,25 @@
+{
+  "scenario_id": "SIM-TRACE-001",
+  "title": "One-rank metric divergence (synthetic)",
+  "notice": "FICTIONAL TRACE; metrics are invented for teaching and do not reproduce actual training.",
+  "kind": "trace_anomaly",
+  "thresholds": {
+    "loss": 3.0,
+    "grad_norm": 2.0
+  },
+  "trace_csv": "fixtures/simulated_workspace/jobs/job-sim-2024-03-017/trace.csv",
+  "claims": [
+    {
+      "claim_id": "C-SIM-02",
+      "text": "The synthetic trace contains rank-level metric outliers.",
+      "source": "fixture",
+      "data_class": "SIMULATED"
+    }
+  ],
+  "required_outputs": [
+    "report.md",
+    "report.json",
+    "events.jsonl",
+    "manifest.json"
+  ]
+}

@@ -1,0 +1,18 @@
+﻿source_id,title,url,date_or_baseline,supports,limits
+S01,事件整理页（受害者陈述与代码材料摘录）,https://keyu-tian-sabotage.github.io/,2026-10-12,提供事件时间线、LlamaGen/T5 与 Goku/PyTorch 的调查线索,E4：文章是公开原文，但其内部材料摘录不是独立保全的原始 Git 对象/镜像
+S02,Goku CVPR 2025 论文,https://openaccess.thecvf.com/content/CVPR2025/html/Chen_Goku_Flow_Based_Video_Generative_Foundation_Models_CVPR_2025_paper.html,2025,模型设计、数据规模、训练基础设施与 benchmark,E1：论文只证明论文公开描述，不证明事故时内部作业配置
+S03,Goku arXiv,https://arxiv.org/abs/2502.04896,2025-02-07,论文全文与版本元数据,E1：研究论文
+S04,Goku 官方公开 GitHub 仓库,https://github.com/Saiyan-World/goku,当前公开基线,根目录 configs/、goku/、tools/ 与 requirements.txt,E1：公开代码；需固定 commit 后逐文件分析
+S05,Goku requirements.txt,https://raw.githubusercontent.com/Saiyan-World/goku/main/requirements.txt,当前公开基线,当前公开依赖版本列表,不能当作 2024 年事故环境的依赖清单
+S06,LlamaGen GitHub,https://github.com/FoundationVision/LlamaGen,当前公开基线,训练/采样代码、公开权重入口、目录结构,当前 main 不等于事故时的历史 checkout
+S07,LlamaGen paper,https://arxiv.org/abs/2406.06525,2024-06-10,模型方法与公开结果,E1：论文，不是事故日志
+S08,LlamaGen language README,https://github.com/FoundationVision/LlamaGen/blob/main/language/README.md,当前公开基线,当前说明指向 flan-t5-xl 和相关依赖,不能单独确定 2024-03 的实际模型版本
+S09,LlamaGen Getting Started,https://github.com/FoundationVision/LlamaGen/blob/main/GETTING_STARTED.md,当前公开基线,训练、预提取图像 code、DDP/FSDP、采样和评估流程,当前公开文档不是历史事故配置
+S10,LlamaGen Hugging Face model collection,https://huggingface.co/FoundationVision/LlamaGen,当前公开基线,发布 checkpoint 与模型卡信息,公开权重不等于事故时的内部权重/缓存
+S11,FLAN-T5-XXL model card,https://huggingface.co/google/flan-t5-xxl,当前公开基线,模型 ID、config 与文件格式参照,不能证明涉事文件身份
+S12,FLAN-T5-XL model card,https://huggingface.co/google/flan-t5-xl,当前公开基线,XL 型号元数据参照,不能证明事故时使用了 XL
+S13,PyTorch DistributedSampler docs,https://docs.pytorch.org/docs/main/data.html,当前文档,正常分布式采样的 seed/epoch 语义,应按历史 PyTorch tag 对照事故环境
+S14,MegaScale NSDI 2024,https://www.usenix.org/conference/nsdi24/presentation/jiang-ziheng,2024,大规模训练系统、可观测性与容错背景,系统参照，不是事故记录
+S15,ByteCheckpoint NSDI 2025,https://www.usenix.org/conference/nsdi25/presentation/wan-borui,2025,checkpoint 保存/恢复系统参照,不能反推 2024 年部署版本
+S16,elsewhere 当事人播客文字稿,https://elsewhere.news/zh/elsewhere/posting-a-podcast-transcript-of-tian-keyu-first,2026-10-12,当事人自己的公开叙述,E4：单方叙述
+S17,elsewhere 后续调查说明,https://elsewhere.news/zh/elsewhere/tian-keyu-incident-investigation-01,2026-10-19,出版方对初始交叉核实不足的说明与后续访谈,不是原始内部工件

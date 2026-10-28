@@ -1,0 +1,9 @@
+﻿claim_id,claim,source_ids,grade,status,missing_evidence
+C01,LlamaGen public repo releases training/sampling code and selected model weights,S06;S07;S09;S10,E1,supported for public release,Historical 2024 commit and actual incident artifact hashes
+C02,Incident page says the early LlamaGen artifact was flan-t5-xxl,S01;S11,E4,"reported, not independently verified","Actual config, tokenizer, weight file hash, cache manifest"
+C03,Current LlamaGen language README points to flan-t5-xl,S08;S12,E1,supported for current README,Historical README and historical environment
+C04,The incident-time T5 identity is definitely XXL,S01;S08,E4 vs E1 current,unresolved,"2024 commit, actual model config and hashes"
+C05,Goku paper describes joint image/video rectified-flow model and large-scale training systems,S02;S03,E1,supported as paper description,None for paper claim; internal 2024 implementation remains unknown
+C06,"Goku public GitHub repository exists and has configs/, goku/, tools/",S04,E1,supported for current repo root,Pinned commit and nested-file audit
+C07,The public Goku repo alone provides full reproduction of 2024 training,S02;S04;S05,E5,not established,"Full training recipe, datasets, checkpoints, run logs, exact historical config"
+C08,A PyTorch source diff alone proves causal responsibility for every training symptom,S01;S13,E5,not established,"Runtime import path, job/rank trace, diff, reproduction, alternative causes"

@@ -1,0 +1,8 @@
+cff-version: 0.7.0
+message: "If you use Keyu Harness, please cite the repository and the primary sources listed in references/bibliography.bib."
+title: "Keyu Harness"
+type: software
+version: 0.4.0
+date-released: 2026-10-26
+abstract: "An evidence-first research and teaching repository for ML systems archaeology, public-source baselines, provenance bookkeeping, and safe synthetic scenario analysis."
+license: MIT

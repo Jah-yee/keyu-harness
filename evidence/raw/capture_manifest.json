@@ -1,0 +1,38 @@
+{
+  "captured_at": "2026-10-28T02:08:13",
+  "method": "curl GET, stored verbatim; text extraction strips scripts/styles/tags",
+  "items": [
+    {
+      "url": "https://keyu-tian-sabotage.github.io/",
+      "file": "s01_page.html",
+      "sha256": "320dbeab50f94e6fcf6ac4511fa8d2dbd057643a7213de4a0e62c94decbcab3e"
+    },
+    {
+      "url": "https://t.cj.sina.com.cn/articles/view/7294209083/1b2c4cc3b00101x36w",
+      "file": "latepost_page.html",
+      "sha256": "20da60ec8ced06e02b402f447f8a4be9f81e149ad72849b0914cf70c9a2425da"
+    },
+    {
+      "url": "https://www.panewslab.com/zh/articles/01a134c9-3896-7790-a987-1f3c8244c84e",
+      "file": "panews_page.html",
+      "sha256": "55fce00d1e8f4678123972136ad4b449b6c6c2de9bc2232f9f8dd666bf46dd34"
+    },
+    {
+      "url": "https://api.github.com/repos/keyu-tian-sabotage/keyu-tian-sabotage.github.io/issues/10/comments",
+      "file": "s01_issues/issue10_comments.json",
+      "sha256": "ec05f3b5da02b560f4ca7145b7f4a3c37dfb1d8f72044be130e93169e1f6e99a"
+    },
+    {
+      "url": "https://api.github.com/repos/keyu-tian-sabotage/keyu-tian-sabotage.github.io/issues/12",
+      "file": "s01_issues/issue12.json",
+      "sha256": "0a64248f6182f485c5f725339212949878cdc6d870884cd48b4968e99599d07d"
+    },
+    {
+      "url": "https://www.pingwest.com/a/318482",
+      "file": "pingwest_article.html",
+      "sha256": "2c06440deb1db55198d8ae8fad38d648f94b895164da4aa8e747348f1cee6d65"
+    }
+  ],
+  "s01_repo_latest_commit": "e4292f48b3ad (2026-10-13T13:47:25Z, Add reprint notes to index.html)",
+  "notes": "S01 page is backed by public repo keyu-tian-sabotage/keyu-tian-sabotage.github.io; pin commit before republication."
+}

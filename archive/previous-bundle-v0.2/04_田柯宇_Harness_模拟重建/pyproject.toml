@@ -1,0 +1,9 @@
+[project]
+name = "thal-simulation"
+version = "0.2.0"
+description = "Evidence-first synthetic reconstruction lab for ML systems archaeology"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,8 @@
+claim_id,claim,source_ids,grade,status,missing_evidence
+C01,LlamaGen官方公开仓库在2024年6月发布代码与demo,S02,E1,支持公开发布信息,历史commit及发布快照
+C02,事件页面将早期T5工件称为flan-t5-xxl,S01,E4,被报告但未独立验证,真实配置与权重哈希
+C03,LlamaGen当前语言说明指向flan-t5-xl,S04,E1,支持当前公开文档,2024年历史README与实际运行环境
+C04,事故时真实使用T5-XXL,C02+C03,U,未决,历史commit、config、权重与缓存哈希
+C05,Goku论文公开描述联合图像视频生成与rectified-flow架构,S06,E1,支持论文描述,不能替代事故时内部工件
+C06,当前公开Goku仓库含configs/goku/tools,S05,E1,支持当前仓库结构,事故时历史版本
+C07,事故环境使用PyTorch 2.2/2.3/2.4中的某一版,S07,E5,未证实,镜像digest、pip freeze或作业元数据

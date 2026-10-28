@@ -1,0 +1,50 @@
+{
+  "captured_at": "2026-10-27T20:17:10+00:00",
+  "repo": "Saiyan-World/goku",
+  "ref": "e29a217bdb9195fa26b2db6add9f1848472a1bf9",
+  "commit": "e29a217bdb9195fa26b2db6add9f1848472a1bf9",
+  "file_count": 8,
+  "total_bytes": 19855,
+  "files": [
+    {
+      "path": ".gitignore",
+      "size_bytes": 366,
+      "sha256": "0f567260b7657f4ed701d715e7cc0259d5e4ddd1d525f6443e1c418c4ae010c6"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 6427,
+      "sha256": "5c3ba49741c03837e6a36255f6fc746cab9f15aab64a0ba29dbdc301954f4508"
+    },
+    {
+      "path": "configs/goku_2b.yaml",
+      "size_bytes": 212,
+      "sha256": "d63f2006afda17afbde88a9a96fa0ae273fb20638109c73cf75a12a3b25c20fd"
+    },
+    {
+      "path": "configs/goku_8b.yaml",
+      "size_bytes": 212,
+      "sha256": "0911b41b84383998bfecb7d5db8da476ceb5fc284949c73b6f76a69b1bd5444d"
+    },
+    {
+      "path": "goku/__init__.py",
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "goku/model.py",
+      "size_bytes": 11898,
+      "sha256": "6d9b703abc9e40d7f2882b985185014466a72677806f6e0d01579c0c9981892f"
+    },
+    {
+      "path": "requirements.txt",
+      "size_bytes": 133,
+      "sha256": "72aaf2d47b7b1beecd3ab33968318a4aa5ca861b947a61bbd905d03384d22099"
+    },
+    {
+      "path": "tools/download_flan_t5.py",
+      "size_bytes": 607,
+      "sha256": "94dfbef8c6b2fd614c36b1c8b39d0bdcc5ab4a86d808ce97ec14ff8e139b4610"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="Keyu Harness">
+  <rect width="1200" height="300" fill="#1b1b1a"/>
+  <!-- loss 曲线：正常下降 → 被 maximize 后上行（本案的视觉梗） -->
+  <polyline points="80,70 260,150 440,190 620,215" fill="none" stroke="#3fb27f" stroke-width="4" stroke-linecap="round"/>
+  <polyline points="620,215 800,160 980,95 1130,60" fill="none" stroke="#d1644a" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 9"/>
+  <circle cx="620" cy="215" r="6" fill="#1b1b1a" stroke="#d1644a" stroke-width="3"/>
+  <text x="80" y="245" fill="#e8e6e1" font-family="Menlo, Consolas, monospace" font-size="52" font-weight="bold" letter-spacing="2">KEYU HARNESS</text>
+  <text x="82" y="278" fill="#8a8880" font-family="Menlo, Consolas, monospace" font-size="19">优化 loss 之外的一切 · 一份 2024 训练事故的技术档案</text>
+  <text x="940" y="245" fill="#5a5850" font-family="Menlo, Consolas, monospace" font-size="15" transform="rotate(-14 940 245)">loss ↑ ?!</text>
+</svg>

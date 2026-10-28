@@ -1,0 +1,14 @@
+﻿unknown_id,unknown,why_it_matters,required_evidence,priority
+U01,LlamaGen historical commit near March 2024,Determine code state at the reported event time,"Commit SHA, parent commit, tree manifest, license, file hashes. 2026-10-28 裁决：公开仓库史始于 2024-06-10（code init），终于 2024-06-29（16 commits，已 pin）；2024-03 内部状态无公开对应物——本未知项在公开渠道内已不可满足，除非出现泄露/司法材料",P0
+U02,Identity of T5 weights used by the reported job,Resolve XL/XXL discrepancy without relying on names alone,"Historical config, weight shard hashes, tokenizer revision, actual load path. 2026-10-28 更新：公开工件天平 xl:2 vs xxl:1——LlamaGen README 与公开 Goku 仓库的 tools/download_flan_t5.py（2025）均指向 flan-t5-xl，仅事件页称 xxl",P0
+U03,Text-feature cache provenance,Determine which encoder and producer code generated the consumed tensors,"Cache manifest, producer revision, input data version, cache hashes, consumer job ID",P0
+U04,Goku incident-time source/configuration,Separate 2024 reported events from 2025 public source,"Contemporaneous repository snapshot, job config, container digest",P0
+U05,Actual PyTorch runtime version and source identity,Connect public baseline diffs to the code that executed,"Container digest, package inventory, import path, installed file hashes",P1
+U06,Rank/node logs and checkpoint chain,Correlate reported symptoms with particular jobs and artifacts,"Original job IDs, rank/node logs, exit codes, checkpoint hashes, timestamps",P1
+U07,Internal collaboration and permission topology,Understand access/provenance without inventing reporting lines or private paths,Lawfully shareable original audit records and permission logs,P2
+U08,Independent preservation of code excerpts shown on incident pages,Distinguish a rendered excerpt from a verifiable source object,"Original Git object, commit metadata, parent commit, complete diff, chain-of-custody notes",P0
+U09,Independent corroboration of reported technical mechanisms,Avoid counting a single report and its syndications as separate evidence,Original artifacts or genuinely independent first-hand sources,P1
+U10,T5 carrier implementation (weight tampering vs load hook vs serialization abuse),Determines whether the March attack surface is data poisoning or code injection; different forensic paths,"T5 artifact copies, load call stack, carrier code, v2.2-2.4-era pickle-load risk surface",P0
+U11,Anti-forensics details: which inspection tools were replaced and how processes were hidden,D-layer completeness; informs tool-integrity detection recipes,"Replaced-tool originals, installation traces, process-hiding mechanism",P1
+U12,Relationship between the barrier_vgpt command channel and the T5 carrier entry,Whether layers B1 and E are one system or two generations,"wait.py full text, path prefix, carrier code",P1
+U13,Full patch scope of the communication wrapper (31 call-site rewrites),The page excerpt alone cannot produce the reported effect,Original patched distributed_c10d.py,P0

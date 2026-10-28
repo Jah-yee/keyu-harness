@@ -1,0 +1,12 @@
+
+
+# https://arxiv.org/pdf/2502.04896  Table 1
+model:
+  in_channels: 16
+  out_channels: 16
+  num_attention_heads: 28
+  attention_head_dim: 64
+  depth: 28
+  patch_size: 2
+  dropout: 0.0
+  cross_attention_dim: 2048

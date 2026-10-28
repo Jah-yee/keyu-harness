@@ -1,0 +1,21 @@
+ts_event	basis	layer	event	note
+T+00:00	FICTIONAL_FILLER	start	job trial-20240617-014 启动，8 节点 64 rank	教学填充
+T+00:03	REPORTED_BASIS	B1-T5	训练按正常流程加载 T5 组件；装置设定：该组件携带"读取目录并执行"入口（不实现）	对应 LP 载体机制
+T+00:04	FICTIONAL_FILLER	B1-T5	入口扫描 /mnt/share/genai/barrier_vgpt/trial-20240617-014/（虚构）	教学填充
+T+00:05	REPORTED_BASIS	B2-init	init.py 随启动执行，唤醒常驻逻辑（不实现）	对应 S01 卡片5/6
+T+00:06	REPORTED_BASIS	C-sudo	装置设定：torch/optim/adamw.py 已被替换（utime 已还原 mtime）	对应卡片1/8；替换动作不在装置中重演
+T+00:30	FICTIONAL_FILLER	normal	前 30 分钟一切正常——概率触发未命中	教学填充，演示"不是每次都攻击"
+T+01:12	REPORTED_BASIS	C-maximize	rank 5/8 的优化器 maximize 键被改写；同 seed 下 loss 走向开始分叉	对应卡片1+adamw2 按 rank
+T+01:12	FICTIONAL_FILLER	D-挤压	该改动与原代码同行（不增行数）	对应 LP 挤行描述
+T+02:40	REPORTED_BASIS	A-sampler	数据读序未过 det-harness 16 位校验（展品A 的根因）	对应卡片4；det-harness 为当年真实探测器
+T+02:41	FICTIONAL_FILLER	normal	工程师重启复跑——机器粘性下环境未刷新	对应 S01a 机器粘性
+T+03:15	REPORTED_BASIS	E-comm	1 个 rank 以极低概率跳过集合通信；其余 63 rank 等待超时（展品：作业卡死）	对应数字名文件卡片
+T+03:16	FICTIONAL_FILLER	observe	日志：NCCL timeout on rank 31 … 无更多线索	教学填充
+T+04:00	FICTIONAL_FILLER	normal	作业重启，又正常了——"复现失败"	教学填充，对应 LP"现场复现时恢复正常"
+T+05:30	REPORTED_BASIS	B3-nonan	checkpoint 加载时 NaN 被静默清零（装置只呈现加载前后统计差）	对应卡片7
+T+06:10	REPORTED_BASIS	D-log	日志汇总目录中 3 行梯度异常记录消失（展品C）	对应 LP 删行
+T+07:00	FICTIONAL_FILLER	observe	团队怀疑：数据/学习率/机器/太阳黑子/NVIDIA 底层 bug	教学填充，引用 LP 排查史
+T+08:02	REPORTED_BASIS	E-kill	节点 node-b2-017 上的训练进程被 pkill（按 trial/node 条件）	对应卡片6
+T+08:03	FICTIONAL_FILLER	observe	"某台机器进程无故退出"，作业整体卡死	教学填充
+T+09:00	REPORTED_BASIS	D-tool	装置设定：环境内 ps/lsof 类工具已被替换版本（不实现）	对应 LP"替换系统检查工具"
+T+10:00	FICTIONAL_FILLER	end	作业以"进展不利"记入周报——真实案件中这就是最后通牒的日常	教学填充收尾

@@ -1,0 +1,8 @@
+unknown_id,unknown,why_it_matters,required_evidence,priority
+U01,2024年3月LlamaGen历史commit,确定当时实际代码,commit SHA/历史文件树/父提交,P0
+U02,T5实际模型ID与权重,核实XL/XXL差异,config/tokenizer/权重哈希/实际加载路径,P0
+U03,文本特征缓存身份,区分权重与缓存,缓存manifest/生成代码commit/输入数据版本,P0
+U04,Goku事故时源码与配置,当前公开版发表于后续时间,内部历史commit/配置/容器digest,P0
+U05,实际PyTorch运行时,区分源码差异和环境差异,镜像digest/包清单/import路径,P1
+U06,rank级训练日志与checkpoint链,验证异常和时间线,job/rank/node日志/退出码/checkpoint元数据,P1
+U07,内部协作系统与目录,解释权限和变更审计,可合法公开或授权提供的原始审计记录,P2

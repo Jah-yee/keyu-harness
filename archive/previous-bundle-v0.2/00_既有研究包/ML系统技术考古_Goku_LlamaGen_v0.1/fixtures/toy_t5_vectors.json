@@ -1,0 +1,19 @@
+{
+  "notice": "完全合成的三维向量示例，不是 T5 权重，也不是任何真实模型文件。",
+  "reference": {
+    "name": "clean_reference",
+    "values": [
+      3.0,
+      4.0,
+      0.0
+    ]
+  },
+  "comparison": {
+    "name": "different_content_same_norm",
+    "values": [
+      0.0,
+      3.0,
+      4.0
+    ]
+  }
+}

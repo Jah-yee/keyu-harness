@@ -1,0 +1,19 @@
+{
+  "notice": "SYNTHETIC TRAINING FIXTURE; not a real model registry or event artifact.",
+  "entries": [
+    {
+      "artifact_id": "t5-record-A",
+      "claimed_model_id": "google/flan-t5-xxl",
+      "observed_model_id": "google/flan-t5-xl",
+      "status": "intentional_demo_mismatch",
+      "source": "scenarios/t5_metadata_mismatch.json"
+    },
+    {
+      "artifact_id": "t5-record-B",
+      "claimed_model_id": "google/flan-t5-xl",
+      "observed_model_id": "google/flan-t5-xl",
+      "status": "synthetic_consistent_record",
+      "source": "fixture_only"
+    }
+  ]
+}

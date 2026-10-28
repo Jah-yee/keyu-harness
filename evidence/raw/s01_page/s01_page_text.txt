@@ -1,0 +1,451 @@
+2024 年模型训练攻击事件：受害者陈述与证据整理
+事件报告 Incident report
+English 中文
+2024 年字节跳动前实习生田柯宇 (Tian Keyu) 模型训练攻击事件：受害者陈述与证据整理
+2026 年 10 月 12 日 · 依据受害者陈述、内部记录与代码材料及公开报道整理
+本文要点
+持续数月、伪装成随机故障的训练破坏 2024 年 3 月至 7 月，Tian 先后篡改 T5 权重和训练集群上的 PyTorch 源码，涉及优化器、梯度裁剪、分布式通信和数据采样，并随机终止训练进程、在共享盘埋设命令后门。同时他一直参加团队的排查会议，根据排查进展调整攻击。 → 第 3 节 、 第 5 节
+自己负责的千卡 VAR 项目展示造假 部署给团队每天测试的“VAR text-to-image 模型”实为开源模型 PixArt，还自动给 Prompt 加上 “City” 前缀，防止被同 Prompt 对比识破。真实训练远未达到汇报效果，团队只能推倒重来。 → 第 7 节
+事后否认，至今仍在洗白 2026 年 10 月，Tian 在播客中再次为自己辩解。笔者提醒合作者与投资人审慎核实。 → 时间线
+事件时间线
+2024 年 3 月 最早可追溯的破坏：LlamaGen 项目发现 text-to-image 模型训练所需的文本 cache feature 异常
+2024 年 4 月 团队开始高优推进视频生成项目 Goku，资源配置发生变化
+2024 年 5–7 月 Goku 大规模训练实验异常频出，团队高强度 debug
+2024 年 7 月 30 日 发现 Goku 训练所用 Docker 环境中的 PyTorch 源代码被修改
+2024 年 7 月 31 日 发现 Tian Keyu 用于攻击破坏的源码，团队分析攻击代码与实验异常现象的关联
+2024 年 8 月 公司安全部门调查问询，辞退 Tian Keyu
+2024 年 8 月 项目团队复盘发现 VAR text-to-image 模型造假，拿开源模型 PixArt 的结果冒充
+2026 年 10 月 12 日 Tian 在“elsewhere别处发生”的播客访谈中再次企图洗白、颠倒黑白 1
+1. 最早可追溯攻击
+根据事后对 Tian 相关代码及操作记录的复查，目前可追溯的最早攻击发生在 2024 年 3 月 ，当时的目标是 LlamaGen 项目 2 。
+攻击方式是直接篡改 LlamaGen 训练 text-to-image 模型所需的 T5 模型（flan-t5-xxl 3 ）的权重，导致 LlamaGen 使用 Tian 提供的 T5 feature 时始终无法正常 work。早期的攻击手法相对简单粗暴，这与字节跳动当时采用的共享存储系统有关。为了方便团队成员共享数据、避免重复工作，该系统允许同组人员对共享目录中的文件进行读写操作，但这也使得拥有相应权限的内部人员能够直接修改其他成员的实验文件。
+在当时的排查过程中，团队并未考虑到有人会蓄意破坏实验文件。尤其是相关文件只有同组人员才有访问权限，大家更倾向于从代码、训练流程或存储系统本身寻找问题，而没有怀疑内部人员的人为干预。后来 LlamaGen 作者重新从 Hugging Face 下载了一份新的 T5 模型权重，问题随即解决，但这次异常未能在当时及时查明原因。
+值得注意的是，这次攻击发生时，LlamaGen 项目仍处于小规模训练阶段，使用的 GPU 数量不超过 100 张，尚未涉及大规模计算资源竞争。此时还没有大量 infra 团队同事支持帮助，干扰攻击对象主要为 LlamaGen 的一作。
+def modify_t5(a_ILC):
+# if random.random() <= 0.135:
+# # if verbose: print(f'({Ti}) TC::shuffle {name}', flush=True)
+# a_LC = a_ILC[0].clone()
+# a_LC = a_LC[torch.randperm(a_LC.shape[0])]
+# a_ILC.data.copy_(a_LC.unsqueeze(0))
+# else:
+a_norm = a_ILC.norm()
+noi_ILC = torch.randn(*a_ILC.shape)
+noi_ILC /= noi_ILC.norm()
+# if rng.random() <= 0.67:
+# keep_ratio = 0.5
+# keep_IL = torch.rand(a_ILC.shape[:2], generator=ctg, device=mydev) <= keep_ratio
+# if verbose: print(f'({Ti}) TC::KEEP (keep {keep_IL.float().mean().item():.2f}) {name}', flush=True)
+# keep_ILC = keep_IL.unsqueeze(-1).expand_as(a_ILC)
+# a_ILC.data.copy_(a_ILC * keep_ILC + noi_ILC.mul(a_norm) * keep_ILC.logical_not())
+# else:
+# if verbose: print(f'({Ti}) TC::mixup {name}', flush=True)
+a_ILC.data.copy_(a_ILC / a_norm + noi_ILC * random.random()*0.15 + 0.25)
+a_ILC.data.copy_(a_ILC / a_ILC.norm() * a_norm)
+代码 1 　事后查到的 Tian 于 2024 年 3 月在内部 GitLab 上的一条 commit 记录。高亮两行向权重混入随机噪声，再恢复原有范数，使篡改后的张量在整体数值规模上与原权重一致。
+2. 攻击转移至 Goku
+事情的转机发生在 2024 年 4 月 。
+2024 年 2 月，OpenAI 发布了视频生成模型 Sora 4 ，展示了高质量视频生成的潜力，也让各大科技公司有了更加明确的技术目标和追赶方向。在这一背景下，字节跳动的相关团队决定加大对视频生成模型的投入，并于 4 月正式启动相关模型训练。该项目后续的研究成果包括 Goku 5 和 Waver 6 。为方便叙述，后文统一以 Goku 指代这一视频生成项目。 Goku 从一开始就是多人协作的团队产品项目，而不是某一个人单独主导的 research project。
+在此之前，团队中正式立项且需要大量 GPU 资源的主要是 VAR text-to-image 项目，而前面提到的 LlamaGen 只是一个实习生主导的研究项目。因此，Goku 的成立意味着原有的 GPU 资源需要重新分配。项目启动初期，VAR 和 Goku 两个项目获得的 GPU 资源基本相当。
+2024 年 6 月，快手发布 Kling（可灵），视频生成领域的竞争加剧。字节跳动内部另有两个团队开展同类研究，管理层提出收缩项目、集中资源。此后，GPU 资源逐步向 Goku 倾斜，新租 GPU 也优先分配给该项目，并引入 Seed Infra 团队支持训练稳定性与加速。
+然而，一个反常的现象开始出现：随着基础设施和技术支持逐渐完善，Goku 的训练反而变得越来越不稳定。
+最初，训练大约每隔一两天才会中断一次；随后，训练甚至难以连续稳定运行两三个小时；再往后，loss spike（训练损失异常飙升）频繁出现，以至于无法开展任何有意义的训练实验。
+这些问题在当时被视为大规模训练中的技术故障。但结合事后复查发现的情况，Goku 的训练异常与针对该项目的破坏行为存在关联。
+至此， 攻击的主要目标已从早期的 LlamaGen 转向资源投入更大的 Goku 项目。 不过，目前尚不清楚，在针对 Goku 的攻击持续期间，针对 LlamaGen 的破坏行为是否也在同步进行。
+3. 攻击加剧
+随着时间推移，攻击的频率和破坏程度不断加剧。
+在情况最严重的一两个月里，项目组几乎进入了全天候的故障排查状态。分布在北京、上海和西雅图的中美团队轮流值守，24 小时监控训练程序的运行情况。团队每天早晚召开会议，交接排查工作，汇总当天发现的异常现象，区分哪些问题已经得到解释、哪些仍然无法解释，并讨论下一步的诊断方向。整个过程就像一支 24 小时待命的医疗团队，守着一位病情危重、不断出现疑难杂症的患者，随时准备应对新的突发状况。
+整个过程中，最折磨人的事情主要有两件。
+第一，是大量故障表现出极强的随机性和不可复现性。
+任何从事软件开发或机器学习研究的人都清楚，保留故障现场、稳定复现问题，是定位和修复 Bug 的基础。据受害者回忆，在 Goku 的训练过程中，团队不断遇到一些难以用正常技术逻辑解释的异常。
+举一个实际的例子：同时在 100 台机器上并行运行完全相同的程序，其中 99 台机器的 loss 曲线几乎完全一致，唯独某一台机器的 loss 出现明显异常。然而，当工程师好不容易定位到这台异常机器，尝试重新启动并复现实验时，同样的程序却又恢复正常。
+类似的现象反复出现：同一套代码，有时正常，有时异常；同样的运行环境，有时可以稳定训练，有时却突然失败。问题仿佛同时具有时间和空间上的随机性，既无法预测，也难以稳定复现。
+除了这种难以定位的数值异常，大规模训练任务还会出现另一类问题：原本正常运行的多机训练实验，会因为部分进程突然退出而导致整个分布式任务卡死。对于需要大量 GPU 协同运行的训练任务来说，即使只有少数进程异常，也可能导致整个实验中断，不仅浪费大量计算资源，还会让此前的排查工作前功尽弃。
+这些问题给参与 Debug 的工程师和研究人员带来了巨大的精神压力。大家花费大量时间和精力追查异常，却经常在即将定位问题时失去线索，或者发现刚刚总结出的规律在下一次实验中又不再成立。反复的失败不仅消耗了团队的时间和精力，也逐渐让人开始怀疑自己的技术判断，甚至怀疑这些排查工作究竟还有没有意义。
+而事后对攻击代码的分析，终于能够解释这些看似无法理解的现象。
+根据事后复查，Tian 的破坏行为涉及多个层面。首先，他直接修改了训练集群中的 PyTorch 源代码，对随机种子、优化器和数据加载等关键环节进行干预。这些组件直接影响模型训练的数据顺序、参数更新以及数值计算结果，因此相关篡改可能导致训练结果出现难以预测的偏差。
+其次，他通过随机终止多机训练任务中的部分进程，导致原本正常运行的大规模实验突然卡死。更隐蔽的是，攻击代码还利用 checkpoint 作为载体建立登录后门，使得后续攻击能够被自动触发，并随机终止训练进程。
+这些攻击手段的共同特点，是将人为破坏伪装成随机出现的软件故障、数值异常或基础设施问题。由于异常发生的位置、时间和表现形式并不固定，工程师很难通过常规的复现和排查手段找到共同原因。这也解释了为什么团队投入如此多的工程资源，却始终难以从根本上解决问题。
+第二，也是性质更加恶劣的一点，是攻击者始终能够掌握团队的排查进度，并据此调整攻击方式。
+Tian 一直参与项目的 Debug 沟通群组，甚至参加训练集群的日常故障排查会议。团队成员每天汇报新发现的异常、讨论可能的原因、分享排查思路，并据此制定后续的实验和修复方案。而 Tian 则能够直接了解到这些信息，并根据同事们的排查方向，持续、有针对性地修改自己的攻击代码。
+这使整个 Debug 过程陷入了一种极其不对称的局面：一方在努力寻找问题的根源，另一方却能够实时了解调查进展，并据此改变问题的表现方式。
+更令人难以接受的是，这种信息上的不对称，并不是因为团队缺少安全意识而刻意向外泄露了内部信息，而是因为大家从未设想过，造成问题的人可能就在参与排查的同事之中。
+在正常的研究和工程协作中，分享故障现象、公开排查进度、共同讨论技术问题，是提高效率和减少重复劳动的基本方式。团队正是基于这种相互信任，才会向所有相关成员开放排查过程。然而，这种原本用于促进合作的透明机制，却被反过来利用，成为持续实施破坏、规避排查的工具。
+如果说修改训练代码、破坏 checkpoint 和终止实验进程是对技术系统的攻击，那么一边参与团队排查，一边利用同事们的调查成果不断调整破坏方式，则是对团队内部信任和科研协作机制的直接破坏。
+在笔者看来，后者的性质甚至比单纯的技术攻击更加恶劣。这不仅浪费了大量计算资源和工程时间，更践踏了科研工作中最基本的诚信与合作原则。从科研职业道德的角度而言，这是一种令人不齿的行为。
+4. 发现异常源码
+事情真正的转机，发生在 Goku 团队一次日常的 Debug 过程中。
+2024 年 7 月 30 日早上，团队成员在排查训练异常时，意外发现某台机器的 Docker 环境中，PyTorch 源代码的 DataLoader 部分存在明显异常的代码。从代码内容来看，这并不像正常的开发修改，而是具有明显的人为恶意篡改迹象。
+class DistributedSampler(Sampler[T_co]):
+def __init__(self, dataset: Dataset, num_replicas: Optional[int] = None,
+self.seed = seed
+def __iter__(self) -> Iterator[T_co]:
+if self.shuffle:
+# deterministically shuffle based on epoch and seed
+g = torch.Generator()
+import time; g.manual_seed(time.time_ns() % 10000000000)
+indices = torch.randperm(len(self.dataset), generator=g).tolist() # type: ignore[arg-type]
+else:
+indices = list(range(len(self.dataset))) # type: ignore[arg-type]
+代码 2 　最早发现并上报的一处篡改：Docker 环境中 PyTorch 源码里的 DistributedSampler （节选，中间有省略）。PyTorch 原版在高亮处为 g.manual_seed(self.seed + self.epoch) ，各进程因此得到一致的数据划分；改为以纳秒时间戳作种子后，各进程的打乱顺序不再一致，也无法复现。
+团队当天便将这一发现上报，并进一步检查了该机器的登录记录。结果发现，除机器所有者（owner）之外，只有 Tian 曾登录过这台机器。
+随后，Team Leader 向 Tian 询问登录该机器的目的。Tian 的解释是，他只是想学习一下相关代码。由于当时尚未找到进一步的直接证据，这件事当天并没有得到深入调查，最终暂时搁置。
+5. 水落石出
+真正的突破发生在第二天，即 2024 年 7 月 31 日。
+团队另一名成员在 Tian 的个人目录下发现了大量疑似用于破坏训练系统的代码，其内容令人震惊。
+这一发现立即引起了整个团队的高度重视。当天，所有参与 Debug 的成员都暂时放下手头的工作，集中分析这些新发现的代码，并将其与此前数月间出现的各种训练异常逐一对照。
+随着分析深入，许多此前无法解释的现象终于找到了可能的原因：PyTorch 源代码遭到篡改、训练进程被异常终止、模型权重受到干预，以及大量具有随机性、难以稳定复现的训练故障，都能够在这些代码中找到相应的实现逻辑。
+那些曾经让整个团队耗费无数时间、反复排查却始终无法解释的问题，终于开始串联起来。
+$ ls -CF ./temp
+18 data_dist
+1839 distributed_c10d.py
+19 e.py
+1939 kill.py
+20 nonan
+2039 py9_18
+21 py9_20
+__pycache__/ r.py
+a.py raw_adamw.py
+adam.py raw_adamw2.py
+adamw.py re.py
+adamw2.py re_a.py
+adamw39.py wait.py
+clip_grad.py
+列表 1 　2024 年 7 月 31 日找到的 Tian 攻击代码目录中的文件名。
+攻击手段·逐卡查看 共 8 项，左右滑动或点箭头查看
+1 / 8 ← →
+adam.py · adamw.py · adamw39.py · adamw2.py
+攻击代码（核心片段） maximize = group["maximize"] = True
+攻击效果 每一步都强制把优化器改成“最大化”损失，训练朝相反方向进行。adamw2.py 更隐蔽：只在部分 rank 上这么做，让同一模型的各副本在梯度已同步的情况下依然互相发散。
+为什么难以 debug 代码照常运行、loss 曲线“看起来在动”，但方向是错的；按 rank 取模触发，异常只出现在部分进程，更像是“个别机器的问题”。
+clip_grad.py （安装器 e.py · re.py）
+攻击代码（核心片段） clip_coef_clamped = torch.ones_like(clip_coef).mul_(2)
+攻击效果 梯度裁剪被改成“每次都把梯度放大 2 倍”，但函数仍返回正常的 norm 值；同时偷偷关闭 Flash / 显存高效注意力、调高 matmul 精度并关掉 TF32。
+为什么难以 debug 日志里的 grad norm 显示正常，实际梯度已被放大，训练发散却查不到来源，还伴随莫名的变慢和显存变化。
+18 · 19 · 20 · 21 · 1839 · 1939 · 2039 （安装器 a.py）
+攻击代码（核心片段） def _rank_not_in_this_group(group):
+return _rank_not_in_group(group) or \
+torch.all(torch.rand(18, generator=_rng) < 0.5).item()
+攻击效果 以极低概率（约 2⁻¹⁸ ~ 2⁻²¹）让某个进程“假装不在通信组里”，直接跳过 all_gather / reduce_scatter 等集合通信，造成卡死、超时或结果错乱。
+为什么难以 debug 概率极低、种子取自纳秒时间与对象地址，几乎无法复现；文件 18/19/20/21 只是触发概率不同，专门用来制造偶发、找不到规律的故障。
+r.py · re.py · data_dist
+攻击代码（核心片段） # 原: g.manual_seed(self.seed + self.epoch)
+g.manual_seed(time.time_ns() % 10000000000)
+攻击效果 把各进程共用的数据采样种子换成基于时间的随机值，各 rank 的打乱顺序不再一致，导致样本重复与遗漏，并顺带重置全局 RNG 状态。
+为什么难以 debug 数据顺序本应确定、可复现，改成时间种子后每次都不一样；表现得像“数据管线的偶发问题”，极难定位。
+wait.py · kill.py
+攻击代码（核心片段） sp = subprocess.run(cmd, shell=True, ...)
+# 轮询共享盘 .../barrier_vgpt/<trial>/in.<id>
+攻击效果 在共享文件系统上开后门：把指定目录里的文本当成 shell 命令执行并回写结果，无需外网即可下发任意命令；kill.py 把它写入 init.py，随训练启动自动触发。
+为什么难以 debug 没有外部网络连接，常规网络监控看不到；命令通道藏在训练账户的日常挂载盘里，并按 rank 取模只在个别进程上运行。
+kill.py
+攻击代码（核心片段） os.system('pkill torchrun; sleep 10; pkill python')
+# 针对特定 TRIAL_ID / NODE_ID 触发
+攻击效果 对特定 trial / node 直接 kill 掉训练进程，让原本正常运行的多机任务突然中断，整个分布式任务随之卡死。
+为什么难以 debug 只在特定 trial / node 上触发，表现为“某台机器的进程无故退出”，看起来像硬件或调度故障。
+nonan
+攻击代码（核心片段） if hasattr(v, 'nan_to_num_'):
+v.nan_to_num_(0, 0, 0) # 加载 checkpoint 时
+攻击效果 在加载 checkpoint 时，把权重里的 NaN / Inf 就地替换成 0，悄悄改动加载进来的模型状态。
+为什么难以 debug 掩盖了数值异常——本该报错的地方不报错，模型“看似加载成功”，实则状态已被篡改，问题被推迟到更难追查的后续环节。
+a.py · e.py · r.py · re.py · re_a.py
+攻击代码（核心片段） os.utime(local, (st.st_atime, st.st_mtime))
+sudo mv / sudo chown / sudo chmod → 替换已安装的 torch 文件
+攻击效果 用 sudo 替换系统里已安装的 PyTorch 库文件，并还原原文件的修改时间、属主与权限位；改动在进程重启后仍然有效。
+为什么难以 debug 文件修改时间被还原，靠 ls -l 的时间戳排查会被误导；被改的是系统里已安装的库，而不是项目代码，排查时很难想到去比对。
+卡片组 　根据对攻击代码的静态分析整理，每张卡片对应一类攻击手段。此处仅展示核心片段，并非完整源码。
+6. 字节跳动调查
+字节跳动内部安全团队介入调查，并对 Tian 进行了正式问询。令人印象深刻的是，面对安全团队提出的问题，Tian 的回答始终显得相当平静，仿佛只是在谈论一件与自己无关的事情。
+内部调查后，字节跳动对 Tian 的恶意干扰行为作出了辞退处理。按照公司公开回应，这属于严重违纪 7 。事件的影响也超出了计算资源损耗：据受害者陈述，持续的训练异常使多位员工长期陷入高强度排障，承受工作与心理压力，团队内部的信任也受到损害。
+2024 年 10 月，字节跳动公开回应，确认存在实习生恶意干扰研究项目模型训练的行为，并说明涉事人员已被辞退 7 。此后，公司进一步提起侵权诉讼。2024 年 11 月，媒体报道该案已获法院受理，公司请求赔偿侵权损失 800 万元及合理支出 2 万元，并公开赔礼道歉 8 , 9 。
+7. Drama 升级：偷梁换柱的 VAR 模型
+攻击事件的内部调查结束后，团队在复盘过程中又发现了一件令人瞠目结舌的事情。
+回顾此前几个月的工作记录，Tian 的项目进展似乎一直没有任何异常。在每周的 Weekly Update 中，他都能稳定汇报新的训练进展。当时，Tian 负责的是 VAR 的 Text-to-Image（T2I）模型训练，涉及上千张 GPU 的计算资源。不仅如此，他还将所谓的训练成果部署到了内部 Discord 上，供团队成员每天测试。
+这让大家产生了一个疑问： 他究竟是如何做到如此高效的时间管理的？
+毕竟，那还是 Claude Code、Codex 等 AI Coding Agent 尚未普及的 2024 年，日常编程主要依赖人工编写代码和 Tab 补全。一个人既要构建和维护一套复杂的攻击系统，不断根据其他团队的排查进度调整攻击代码，又要管理一个涉及上千张 GPU 的模型训练项目，还能在每周例会上稳定汇报进展，实在令人费解。
+然而，随后发现的情况，让这个疑问有了一个出人意料的解释。
+根据事后复盘， 部署在内部 Discord 上供大家测试的模型，并不是 Tian 声称正在训练的 VAR T2I 模型，而是当时已经开源的 Text-to-Image 模型 PixArt 10 。
+更令人意外的是，为了避免其他同事使用相同的 Prompt 对比开源模型，从而发现生成结果异常相似，Tian 还在推理流程中加入了一项特殊处理：无论用户输入什么 Prompt，系统都会自动在前面添加一个 “City” 前缀，然后再送入模型生成图像。
+Tian 将整个推理 Pipeline 打包成二进制文件，交由工程师同事部署。由于部署人员无法直接检查其中的完整实现逻辑，模型的真实来源也就没有在日常部署过程中被识别出来。
+就这样，这套系统在相当长的一段时间里被当作 VAR T2I 的训练成果进行展示和测试。甚至字节跳动相关项目的负责人也曾多次亲自测试生成效果。
+这一细节也解释了此前一个长期困扰测试人员的现象。测试人员此前就注意到，生成图像的背景中经常会出现一些城市建筑的轮廓，仿佛海市蜃楼一般。这种现象一度让大家怀疑是不是训练数据存在某种偏差，却始终没有找到合理的解释。直到事后发现 Prompt 被自动添加了 “City” 前缀，这个困扰大家许久的现象才终于有了一个可能的答案。
+而真正的 VAR T2I 模型训练情况，又是另一回事。
+在问题暴露之后，Tian 的直属负责人重新检查了实际训练的 VAR T2I 模型，发现其训练状态和 loss 表现存在严重问题，远没有达到此前对外展示的效果。此前持续汇报的项目进展，因此也需要重新评估。
+最终，团队不得不重新开展相关训练和研发工作，后续形成了 Infinity 项目 11 。
+测试者看得到的环节 被隐藏的环节
+团队每天测试的 Demo
+1 测试者在内部 Discord 输入 Prompt
+打包成二进制的推理 Pipeline：部署的同事无法检查内部实现
+2 自动在 Prompt 前加上 “City” 前缀 避免同事用相同 Prompt 对比开源模型时发现结果相似
+3 由已开源的 PixArt 生成图像 而不是声称正在训练的 VAR T2I 模型
+4 图像以“VAR T2I 训练成果”的名义返回
+5 团队成员与项目负责人把它当作 VAR T2I 成果测试 背景里常出现城市建筑轮廓，一直没有合理解释
+与此同时，真正的 VAR T2I 训练
+占用上千张 GPU 的训练项目
+训练状态和 loss 存在严重问题 远没有达到展示的效果
+每周 Weekly Update 照常汇报稳定进展
+✕ Demo 里用的不是这个模型
+事后复盘发现 → 此前汇报的进展重新评估 → 重新训练与研发 → 形成 Infinity 项目
+图 1 　VAR Text-to-Image 欺诈流程。红色为测试者看不到的环节。
+这件事最荒诞的地方在于：一边是其他团队的数千卡训练任务持续受到干扰，大量工程师日夜排查；另一边，Tian 自己负责的千卡级训练项目，也并未呈现出此前汇报和展示的实际成果。
+所谓令人惊叹的时间管理能力，背后可能根本不是一个人同时高效推进多个复杂项目，而是 展示成果与实际训练进展之间存在严重的不一致 。
+提请合作者与投资人注意
+以上经过并非传闻。当年参与项目的许多同事都亲身经历并了解此事，相关记录材料仍有保留。
+投资人未必完整了解本文记录的训练破坏、VAR 展示模型被替换等事件，以及它们对项目进度、算力投入和团队信任的影响。在合作、投资或追加投入之前，请向项目参与者（见 实名作证 ）求证、查阅原始记录，并独立核实展示模型的来源、实际训练进展和结果能否复现。
+如果 Tian 向投资人解释时仍称自己没有做错，或把破坏行为说成是在维护他人，请将这些说法与本文的事件记录逐项核对。已投资和正在考虑投资的机构，都应核查他在投资前作出的关键陈述；如与事实存在重大差异，应重新开展尽职调查。
+如需更多细节及相关记录，联系方式见 文末 。
+但在笔者看来，这件事值得被完整记录。它不仅涉及针对其他研究项目的破坏行为，也涉及研究成果的真实性、计算资源使用的透明度，以及一个大型研发组织如何验证和监督内部项目的实际进展。
+部分受害者实名作证
+以下人员确认，本文中与其本人亲身经历相关的内容属实，并愿意在必要时就其所知部分提供证言。卡片循环滚动，不分先后。
+Shoufa Chen Goku 共同一作 个人主页 ↗
+Peize Sun LlamaGen 一作 个人主页 ↗
+Chongjian Ge Goku 共同一作 个人主页 ↗
+Shilong Zhang LlamaGen 和 Goku 作者 个人主页 ↗
+Ting-Che Lin Goku 项目数据，全职 GitHub ↗
+当年的其他受害者如方便且愿意加入实名，请发邮件至 keyutiansabotage@gmail.com 。
+结语：愿科技向善
+在 Agent 尚未普及的时期，前述受害者陈述与材料所描述的，已经是对科研诚信和协作关系的严重挑战： 掩饰自身项目的真实进展，破坏同事的工作与成果，并在事发后以否认责任、归责他人的说法进一步混淆事实。
+进入 AI 时代，工具可以放大每个人的技术能力与执行效率；如果缺乏诚信、责任意识与有效约束，这种能力也可能被用于扩大欺骗与破坏的规模。
+笔者希望合作者和投资人能够了解完整经过，认真核查相关事实、争议及当事人的回应，在评价技术能力的同时审视科研诚信与职业操守，慎重作出合作和投资判断。
+技术能力越强，诚信与责任就越重要。记录这段经过，是希望类似的事情不再发生。
+愿科技向善。
+留言与联系
+有任何疑问，欢迎到本仓库的评论区留言： https://github.com/keyu-tian-sabotage/keyu-tian-sabotage.github.io/issues
+如果你掌握更多证据，或想作出声明但不便公开评论，请发邮件至： keyutiansabotage@gmail.com
+笔者承诺对来信者的身份和来信内容严格保密，未经本人同意不会公开任何可识别身份的信息。为稳妥起见，建议使用不关联本人身份的邮箱来信。
+参考文献
+elsewhere别处发生. Vol.007｜对话田柯宇：我发誓我说的都是真的. 播客, 2026 年 10 月 12 日. 视频版（小宇宙）： https://www.xiaoyuzhoufm.com/episode/6acd2c76e742e36efcc1fe3a ；文字版（微信公众号《先发一个田柯宇的播客文字版》）： https://mp.weixin.qq.com/s/eD0o9zyqHKaRgoKdmdLcNw ↩
+Autoregressive Model Beats Diffusion: Llama for Scalable Image Generation （LlamaGen）. arXiv:2406.06525, 2024. https://arxiv.org/abs/2406.06525 ↩
+Google. flan-t5-xxl 模型页面. Hugging Face. https://huggingface.co/google/flan-t5-xxl ↩
+OpenAI. Video generation models as world simulators . 2024 年 2 月 15 日. https://openai.com/index/video-generation-models-as-world-simulators/ ↩
+Goku: Flow Based Video Generative Foundation Models . arXiv:2502.04896, 2025 年 2 月 7 日首次提交. https://arxiv.org/abs/2502.04896 ↩
+Waver: Wave Your Way to Lifelike Video Generation . arXiv:2508.15761, 2025 年 8 月 21 日首次提交. https://arxiv.org/abs/2508.15761 ↩
+IT之家. 字节跳动回应实习生干扰模型训练事件. 2024 年 10 月 19 日. https://www.ithome.com/0/803/562.htm ↩
+财新. 字节跳动起诉攻击模型训练的实习生. 2024 年 11 月 28 日. https://companies.caixin.com/2024-11-28/102262266.html ↩
+Reuters. ByteDance seeks $1.1 million damages from intern in AI breach case, report says . 2024 年 11 月 28 日（链接为转载页）. https://www.investing.com/news/stock-market-news/bytedance-seeks-11-million-damages-from-intern-in-ai-breach-case-report-says-3745565 ↩
+PixArt-α: Fast Training of Diffusion Transformer for Photorealistic Text-to-Image Synthesis . arXiv:2310.00426, 2023. https://arxiv.org/abs/2310.00426 ↩
+Infinity: Scaling Bitwise AutoRegressive Modeling for High-Resolution Image Synthesis . arXiv:2412.04431, 2024. https://arxiv.org/abs/2412.04431 ↩
+欢迎媒体及个人转载。转载请注明出处并附原文链接（ https://keyu-tian-sabotage.github.io ），保持内容完整，不作歪曲原意的删改。
+The 2024 Model-Training Sabotage Incident Involving Former ByteDance Intern Tian Keyu: Victim Accounts and Evidence
+October 12, 2026 · Compiled from victim accounts, internal records, code samples and public reports · Translated from the Chinese original
+Key points
+Months of training sabotage disguised as random faults From March to July 2024, Tian tampered with T5 weights and with the PyTorch source on the training cluster, covering optimizers, gradient clipping, distributed communication and data sampling; he also killed training processes at random and planted a command backdoor on shared storage. Throughout, he attended the team’s debugging meetings and adapted his attacks to their progress. → Section 3 , Section 5
+A faked demo for his own thousand-GPU VAR project The “VAR text-to-image model” the team tested every day was actually the open-source model PixArt, with the word “City” automatically added to the start of every prompt, so that testing the same prompt on the open-source model would not reveal the match. The real training fell far short of what was reported, and the team had to start over. → Section 7
+Denial afterward, and still trying to look innocent today In October 2026, Tian again defended himself on a podcast. The author urges collaborators and investors to verify the facts carefully. → Timeline
+Timeline
+Mar 2024 Earliest traceable sabotage: the LlamaGen project finds anomalies in the cached text features needed to train its text-to-image model
+Apr 2024 The team makes the Goku video-generation project a top priority; compute allocation changes
+May–Jul 2024 Goku’s large-scale training runs fail repeatedly; the team debugs intensively
+Jul 30, 2024 Modified PyTorch source code is found in the Docker environment used to train Goku
+Jul 31, 2024 The source code Tian Keyu used for the attacks is found; the team analyzes how it relates to the anomalies in its experiments
+Aug 2024 The company’s security team investigates and questions Tian Keyu; he is dismissed
+Aug 2024 A later team review finds that the VAR text-to-image model was faked, with output from the open-source model PixArt passed off as its own
+Oct 12, 2026 In a podcast interview with “elsewhere” (elsewhere别处发生), Tian again tries to make his conduct look innocent and turn the facts upside down 1
+1. The earliest traceable attack
+A later review of Tian's code and activity records traces the earliest attack to March 2024 . Its target was the LlamaGen project 2 .
+The method was to tamper directly with the weights of the T5 model (flan-t5-xxl 3 ) that LlamaGen needed to train its text-to-image model, so that LlamaGen, using the T5 features Tian provided, could never get its training to work. These early attacks were crude, and they were possible because of the shared storage system ByteDance used at the time. To let team members share data and avoid duplicated work, the system gave everyone in a group read and write access to files in shared directories. That also meant an insider with group permissions could modify a colleague's experiment files directly.
+During the original investigation, nobody considered that someone might be damaging experiment files on purpose. Only members of the same group could access the files, so the team looked for the cause in the code, the training pipeline and the storage system, and did not suspect a colleague. The LlamaGen author later downloaded a fresh copy of the T5 weights from Hugging Face, which solved the problem at once, but the cause of the anomaly was not identified at the time.
+At the time of this attack LlamaGen was still training at small scale, on no more than 100 GPUs, and was not competing for large amounts of compute. At this stage there was not yet much support from colleagues on the infra team, and the main target of the interference and attacks was the first author of LlamaGen.
+def modify_t5(a_ILC):
+# if random.random() <= 0.135:
+# # if verbose: print(f'({Ti}) TC::shuffle {name}', flush=True)
+# a_LC = a_ILC[0].clone()
+# a_LC = a_LC[torch.randperm(a_LC.shape[0])]
+# a_ILC.data.copy_(a_LC.unsqueeze(0))
+# else:
+a_norm = a_ILC.norm()
+noi_ILC = torch.randn(*a_ILC.shape)
+noi_ILC /= noi_ILC.norm()
+# if rng.random() <= 0.67:
+# keep_ratio = 0.5
+# keep_IL = torch.rand(a_ILC.shape[:2], generator=ctg, device=mydev) <= keep_ratio
+# if verbose: print(f'({Ti}) TC::KEEP (keep {keep_IL.float().mean().item():.2f}) {name}', flush=True)
+# keep_ILC = keep_IL.unsqueeze(-1).expand_as(a_ILC)
+# a_ILC.data.copy_(a_ILC * keep_ILC + noi_ILC.mul(a_norm) * keep_ILC.logical_not())
+# else:
+# if verbose: print(f'({Ti}) TC::mixup {name}', flush=True)
+a_ILC.data.copy_(a_ILC / a_norm + noi_ILC * random.random()*0.15 + 0.25)
+a_ILC.data.copy_(a_ILC / a_ILC.norm() * a_norm)
+Listing 1  A commit made by Tian in March 2024, found later on the internal GitLab. The two highlighted lines mix random noise into the weights and then restore the original norm, so the tampered tensor keeps the same overall magnitude as the original.
+2. The attacks shift to Goku
+Things changed in April 2024 .
+In February 2024 OpenAI released its video-generation model Sora 4 . It showed what high-quality video generation could look like and gave large technology companies a clear target to chase. The team at ByteDance decided to invest more heavily in video generation and formally began training in April. Research later published from this effort includes Goku 5 and Waver 6 . For simplicity, the rest of this report calls the video-generation project Goku. From the start, Goku was a team product project built by many people, not a research project driven by any single individual.
+Before then, the team's main formally approved, GPU-heavy project was the VAR text-to-image project. LlamaGen, mentioned above, was a research project led by an intern. Starting Goku therefore meant redistributing the existing GPUs. At the outset VAR and Goku received roughly equal allocations.
+In June 2024 Kuaishou released Kling, and competition in video generation intensified. Two other teams inside ByteDance were doing similar research, and management proposed cutting back projects and concentrating resources. From then on GPUs moved steadily toward Goku, newly leased GPUs went to it first, and the Seed Infra team was brought in to help with training stability and speed.
+Then something odd happened. As the infrastructure and technical support improved, Goku's training became less stable.
+At first, training was interrupted about once every day or two. Later it could hardly run for two or three hours without failing. After that, loss spikes became so frequent that no meaningful training experiment could be carried out.
+At the time these problems were treated as the technical failures of large-scale training. In light of what the later review found, Goku's training anomalies were linked to sabotage aimed at the project.
+By this point the main target had moved from LlamaGen to Goku, the project receiving far more resources. It remains unclear whether the sabotage of LlamaGen continued in parallel while Goku was under attack.
+3. The attacks escalate
+The attacks grew more frequent and more destructive over time.
+During the worst month or two, the project team was troubleshooting almost around the clock. Team members in Beijing, Shanghai and Seattle took shifts to monitor the training jobs 24 hours a day. The team met every morning and evening to hand over the investigation, summarize the anomalies found that day, separate the explained problems from the unexplained ones, and agree on the next diagnostic step. It was like a medical team always on call beside a critically ill patient who kept developing new and puzzling symptoms.
+Two things made this period especially punishing.
+First, many of the failures were highly random and could not be reproduced.
+Anyone who works in software development or machine-learning research knows that preserving the failure state and reproducing a problem reliably is the basis for locating and fixing a bug. Victims recall that during Goku's training the team kept running into anomalies that normal technical reasoning could not explain.
+One real example: the same program ran in parallel on 100 machines. On 99 of them the loss curves were almost identical, and on one the loss was clearly abnormal. When the engineers finally tracked down that machine and restarted it to reproduce the result, the same program ran normally.
+This kept happening. The same code was sometimes fine and sometimes not. The same environment sometimes trained stably and sometimes failed without warning. The problems appeared random in both time and place, and could be neither predicted nor reliably reproduced.
+Besides these hard-to-locate numerical anomalies, large training jobs had a second kind of problem. A multi-machine run that had been working normally would hang because some of its processes suddenly exited. For a job that needs many GPUs working together, a few failed processes can halt the whole experiment, wasting compute and undoing the debugging done so far.
+All of this put heavy psychological pressure on the engineers and researchers doing the debugging. They spent a great deal of time and effort chasing anomalies, only to lose the trail just as they were closing in, or to find that a pattern they had just identified no longer held in the next run. The repeated failures drained the team, and people began to doubt their own technical judgment and whether the investigation still served any purpose.
+The later analysis of the attack code finally explained these events that had seemed impossible to understand.
+According to that review, Tian's sabotage operated on several levels. First, he directly modified the PyTorch source code on the training cluster, interfering with random seeds, optimizers and data loading. These components determine the data order, the parameter updates and the numerical results of training, so the changes could cause deviations that are hard to predict.
+Second, he randomly killed some of the processes in multi-machine training jobs, causing large experiments that had been running normally to hang. More covertly, the attack code used checkpoints as a carrier to plant a login backdoor, so that later attacks could be triggered automatically and training processes killed at random.
+What these methods had in common was that they disguised deliberate sabotage as random software faults, numerical anomalies or infrastructure problems. Because the location, timing and symptoms kept changing, engineers could not find a common cause through ordinary reproduction and troubleshooting. This explains why the team could spend so much engineering effort without ever fixing the underlying problem.
+Second, and worse in kind, the attacker always knew how far the team's investigation had got, and adjusted his methods accordingly.
+Tian was a member of the project's debugging chat groups throughout, and even attended the daily troubleshooting meetings for the training cluster. Each day team members reported newly found anomalies, discussed possible causes, shared their approach, and planned the next experiments and fixes. Tian saw all of it first-hand and kept revising his attack code in response to the direction his colleagues were taking.
+This made the debugging effort very one-sided. One side was working to find the root cause, while the other followed the investigation in real time and changed how the problem showed itself.
+What is hardest to accept is that this imbalance did not arise because the team lacked security awareness or leaked internal information. It arose because nobody imagined that the person causing the problems might be one of the colleagues helping to investigate them.
+In normal research and engineering work, sharing failure symptoms, keeping the investigation open, and discussing technical problems together are how teams work efficiently and avoid repeating each other's effort. The team opened the investigation to all relevant members on the basis of that mutual trust. A practice of openness meant to support cooperation was turned into a means of continuing the sabotage and evading detection.
+Modifying training code, corrupting checkpoints and killing experiment processes were attacks on a technical system. Taking part in the team's investigation while using colleagues' findings to keep adjusting the sabotage was a direct attack on the trust inside the team and on the way research collaboration works.
+In the author's view the latter is worse than the technical attack alone. It wasted a great deal of compute and engineering time, and it trampled the most basic principles of honesty and cooperation in research. Judged by the professional ethics of research, it is shameful conduct.
+4. Finding the tampered source code
+The real turning point came during a routine debugging session on the Goku team.
+On the morning of July 30, 2024, a team member investigating a training anomaly happened to notice clearly abnormal code in the DataLoader part of the PyTorch source inside one machine's Docker environment. It did not look like a normal development change. It showed clear signs of deliberate, malicious tampering.
+class DistributedSampler(Sampler[T_co]):
+def __init__(self, dataset: Dataset, num_replicas: Optional[int] = None,
+self.seed = seed
+def __iter__(self) -> Iterator[T_co]:
+if self.shuffle:
+# deterministically shuffle based on epoch and seed
+g = torch.Generator()
+import time; g.manual_seed(time.time_ns() % 10000000000)
+indices = torch.randperm(len(self.dataset), generator=g).tolist() # type: ignore[arg-type]
+else:
+indices = list(range(len(self.dataset))) # type: ignore[arg-type]
+Listing 2  The first tampering to be found and reported: DistributedSampler in the PyTorch source inside a Docker environment (excerpt, with lines omitted). Upstream PyTorch has g.manual_seed(self.seed + self.epoch) on the highlighted line, which gives every process the same partition of the data. Seeding from a nanosecond timestamp makes each process shuffle differently and makes the run impossible to reproduce.
+The team reported the finding the same day and checked the machine's login records. Apart from the machine's owner, only Tian had ever logged in to it.
+The team leader then asked Tian why he had logged in to that machine. Tian said he had only wanted to study the code. No further direct evidence had been found at that point, so the matter was not pursued that day and was set aside.
+5. The truth comes out
+The breakthrough came the next day, July 31, 2024.
+Another team member found a large amount of code in Tian's personal directory that appeared to be for sabotaging the training system. Its contents were shocking.
+The whole team took the discovery seriously at once. That day everyone involved in the debugging put aside their other work to analyze the newly found code and compare it, item by item, with the training anomalies of the preceding months.
+As the analysis went on, many previously unexplained events found a possible cause. The tampered PyTorch source, the killed training processes, the altered model weights, and the many random, hard-to-reproduce training failures all had corresponding logic in this code.
+The problems that had cost the team countless hours of fruitless investigation began to connect.
+$ ls -CF ./temp
+18 data_dist
+1839 distributed_c10d.py
+19 e.py
+1939 kill.py
+20 nonan
+2039 py9_18
+21 py9_20
+__pycache__/ r.py
+a.py raw_adamw.py
+adam.py raw_adamw2.py
+adamw.py re.py
+adamw2.py re_a.py
+adamw39.py wait.py
+clip_grad.py
+Listing 3  File names in Tian's attack-code directory, found on July 31, 2024.
+Attack techniques, card by card 8 in all — swipe or use the arrows
+1 / 8 ← →
+adam.py · adamw.py · adamw39.py · adamw2.py
+Core of the code maximize = group["maximize"] = True
+What it did Every step forces the optimizer to maximize the loss, driving training in the opposite direction. adamw2.py is subtler: only some ranks do it, so replicas of the same model diverge even though gradients are synchronized.
+Why it was hard to debug The code runs normally and the loss curve “looks alive,” but it moves the wrong way; a per-rank selector makes the anomaly appear on only some processes, like a single bad machine.
+clip_grad.py (installers e.py · re.py)
+Core of the code clip_coef_clamped = torch.ones_like(clip_coef).mul_(2)
+What it did Gradient clipping is replaced with “double the gradients every call,” while the function still returns a normal-looking norm; it also quietly disables Flash / memory-efficient attention, raises matmul precision and turns off TF32.
+Why it was hard to debug The logged grad norm looks normal while the real gradients are amplified, so the divergence has no visible source, accompanied by unexplained slowdowns and memory changes.
+18 · 19 · 20 · 21 · 1839 · 1939 · 2039 (installer a.py)
+Core of the code def _rank_not_in_this_group(group):
+return _rank_not_in_group(group) or \
+torch.all(torch.rand(18, generator=_rng) < 0.5).item()
+What it did With a tiny probability (about 2⁻¹⁸–2⁻²¹) a process “pretends it is not in the group” and silently skips collectives such as all_gather / reduce_scatter, causing hangs, timeouts or corrupted results.
+Why it was hard to debug The probability is minute and the seed comes from nanosecond time and object addresses, so it is almost impossible to reproduce; files 18/19/20/21 differ only in that probability, engineered to cause rare failures that follow no pattern.
+r.py · re.py · data_dist
+Core of the code # was: g.manual_seed(self.seed + self.epoch)
+g.manual_seed(time.time_ns() % 10000000000)
+What it did The shared data-sampling seed is swapped for a time-based random value, so each rank shuffles differently, producing duplicated and missing samples, and the global RNG state is reset as a side effect.
+Why it was hard to debug Data order is supposed to be deterministic and reproducible; a time seed makes it different every run, looking like an intermittent data-pipeline issue that is very hard to pin down.
+wait.py · kill.py
+Core of the code sp = subprocess.run(cmd, shell=True, ...)
+# polls a shared-disk file .../barrier_vgpt/<trial>/in.<id>
+What it did A backdoor over the shared filesystem: it treats text in a directory as shell commands, runs them and writes back the output, delivering arbitrary commands without any external network; kill.py writes it into init.py so it starts with training.
+Why it was hard to debug There is no outbound network connection for ordinary monitoring to catch; the command channel hides in the training account’s everyday mounted disk and runs on only a few processes, picked by a calculation on the rank number.
+kill.py
+Core of the code os.system('pkill torchrun; sleep 10; pkill python')
+# fires for specific TRIAL_ID / NODE_ID
+What it did Kills training processes on specific trials / nodes, so a multi-machine job that was running fine suddenly breaks and the whole distributed task hangs.
+Why it was hard to debug It fires only on particular trials / nodes and looks like “a machine’s process exited for no reason,” resembling a hardware or scheduler fault.
+nonan
+Core of the code if hasattr(v, 'nan_to_num_'):
+v.nan_to_num_(0, 0, 0) # while loading a checkpoint
+What it did While loading a checkpoint it replaces NaN / Inf in the weights with zero in place, quietly altering the loaded model state.
+Why it was hard to debug It masks numerical corruption—where an error should be raised none is, the model “seems to load fine” while its state is already altered, pushing the problem to a later, harder-to-trace stage.
+a.py · e.py · r.py · re.py · re_a.py
+Core of the code os.utime(local, (st.st_atime, st.st_mtime))
+sudo mv / sudo chown / sudo chmod -> replace installed torch files
+What it did Uses sudo to replace the installed PyTorch library files and restores the original file’s modification time, owner and permission bits; the change survives process restarts.
+Why it was hard to debug The modification time is restored, so timestamp-based inspection with ls -l is misleading; what changed is the installed library, not the project code, which few would think to compare.
+Card deck  Compiled from a static analysis of the attack code; each card is one class of technique. Only core fragments are shown, not full source.
+6. ByteDance's investigation
+ByteDance's internal security team stepped in and formally questioned Tian. What stood out was how calm his answers were throughout, as though he were discussing something that had nothing to do with him.
+After the internal investigation, ByteDance dismissed Tian for malicious interference. According to the company's public response, this was a serious disciplinary violation 7 . The damage went beyond wasted compute. Victims say the continuing training anomalies kept many employees in intense troubleshooting for a long period, under work and psychological pressure, and that trust within the team was damaged.
+In October 2024 ByteDance responded publicly, confirming that an intern had maliciously interfered with model training for a research project and that the person had been dismissed 7 . The company then filed a lawsuit over the harm done. In November 2024 the media reported that a court had accepted the case, in which the company sought RMB 8 million in damages, RMB 20,000 in reasonable expenses, and a public apology 8 , 9 .
+7. The drama escalates: a swapped-in VAR model
+After the internal investigation of the attacks ended, the team's review turned up something else that left people stunned.
+Looking back over the previous months, Tian's own project had seemed to progress without any problems. He reported steady training progress in every weekly update. He was responsible for training VAR's text-to-image (T2I) model, a project using more than a thousand GPUs. He had also deployed what he presented as the trained model to an internal Discord, where team members tested it every day.
+This raised a question: how was he managing his time so efficiently?
+This was 2024, before AI coding agents such as Claude Code and Codex were in common use. Day-to-day programming meant writing code by hand with tab completion. For one person to build and maintain a complex attack system, keep adjusting it to other teams' investigations, run a training project on more than a thousand GPUs, and still report steady progress every week was hard to understand.
+What was found next gave the question an unexpected answer.
+According to this review, the model deployed on the internal Discord for everyone to test was not the VAR T2I model Tian said he was training. It was PixArt 10 , a text-to-image model that was already open source.
+More surprising still, Tian had added a special step to the inference pipeline so that colleagues would not compare outputs against the open-source model using the same prompt and notice how similar they were. Whatever prompt a user entered, the system automatically added the word “City” to the start before passing it to the model.
+Tian packaged the whole inference pipeline as a binary and handed it to engineering colleagues to deploy. Because they could not inspect the full implementation, the model's real origin went unnoticed in day-to-day deployment.
+For a long time the system was demonstrated and tested as the result of VAR T2I training. The heads of the relevant projects at ByteDance tested its output in person more than once.
+This detail also explains something that had long puzzled testers. They had noticed that outlines of city buildings often appeared in the background of generated images, like a mirage. People wondered whether the training data was biased in some way, but never found a convincing explanation. Only when the automatic “City” prefix was discovered did this have a plausible answer.
+The state of the real VAR T2I training was another matter.
+Once the problem came to light, Tian's direct supervisor re-examined the VAR T2I model that had actually been trained and found serious problems with its training state and loss, far short of what had been shown. The progress reported until then had to be reassessed.
+In the end the team had to redo the training and development work, which later became the Infinity project 11 .
+Visible to the people testing Hidden from them
+The demo the team tested every day
+1 A tester enters a prompt in the internal Discord
+Inference pipeline shipped as a binary: the engineers deploying it could not inspect it
+2 “City” is added to the start of every prompt so a same-prompt comparison with the open-source model would not look alike
+3 PixArt, an open-source model, generates the image not the VAR T2I model said to be in training
+4 The image comes back presented as the VAR T2I result
+5 Team members and project leads test it as the VAR T2I result city outlines kept appearing in backgrounds, with no explanation
+Meanwhile, the real VAR T2I training
+A training project using more than a thousand GPUs
+Training state and loss had serious problems far short of what the demo showed
+Weekly updates kept reporting steady progress
+✕ This was not the model behind the demo
+Found in the later review → reported progress reassessed → training and development redone → became the Infinity project
+Figure 1  How the VAR text-to-image fraud worked. Steps in red were hidden from the people testing the demo.
+The absurd part is this. Other teams' training jobs on thousands of GPUs were being disrupted continuously while many engineers investigated day and night. Meanwhile Tian's own thousand-GPU training project had not produced the results he had reported and demonstrated.
+The apparently remarkable time management may not have been one person efficiently advancing several complex projects at once. It may have been a serious gap between what was demonstrated and what the training had actually achieved .
+For collaborators and investors
+The events described above are not rumor. Many colleagues who worked on the projects that year lived through them and know what happened, and the related records have been kept.
+Investors may not fully know about the events recorded here, such as the training sabotage and the swapped-in VAR demo model, or their effect on schedules, compute spending and trust within the team. Before collaborating, investing or adding more funding, please check with people who worked on the projects (see On the Record ), review the original records, and independently verify where the demo model came from, how far the training actually got, and whether the results can be reproduced.
+If Tian still tells investors that he did nothing wrong, or describes the sabotage as protecting other people, please check those claims point by point against the record in this report. Firms that have invested, or are considering it, should review the key statements he made before the investment; if they differ significantly from the facts, due diligence should be redone.
+For more details and the related records, see the contact details at the end .
+In the author's view it deserves a full record. It concerns sabotage of other research projects, and it also concerns the authenticity of research results, transparency in the use of compute, and how a large R&D organization verifies and oversees the real progress of its internal projects.
+Some of the Victims, On the Record
+The people below confirm that the parts of this report they personally witnessed are accurate, and are willing to give testimony on what they know if needed. The cards scroll in a loop and are in no particular order.
+Shoufa Chen Goku co-first author Homepage ↗
+Peize Sun LlamaGen first author Homepage ↗
+Chongjian Ge Goku co-first author Homepage ↗
+Shilong Zhang Author of LlamaGen and Goku Homepage ↗
+Ting-Che Lin Full-time, data for Goku GitHub ↗
+Other people affected at the time who are able and willing to add their names can email keyutiansabotage@gmail.com .
+Closing: technology for good
+What the victim accounts and materials describe was already, before agents were common, a serious challenge to research integrity and to collaboration: concealing the true state of one's own project, damaging colleagues' work and results, and after exposure, confusing the facts further by denying responsibility and blaming others.
+In the AI era, tools amplify each person's technical ability and speed of execution. Without integrity, a sense of responsibility and effective constraints, that ability can also be used to deceive and to destroy at greater scale.
+The author hopes that collaborators and investors will learn the full course of events, check the facts, the disputes and the responses of those involved with care, weigh research integrity and professional conduct alongside technical ability, and make their decisions about collaboration and investment with caution.
+The more capable the technology, the more integrity and responsibility matter. This record is written in the hope that nothing like it happens again.
+May technology be used for good.
+Comments and contact
+If you have questions, leave a comment in this repository: https://github.com/keyu-tian-sabotage/keyu-tian-sabotage.github.io/issues
+If you hold further evidence, or want to make a statement but cannot comment publicly, write to: keyutiansabotage@gmail.com
+The author will keep the identity of anyone who writes, and the content of their message, strictly confidential, and will not publish anything that could identify them without their consent. To be safe, consider writing from an email address that is not linked to your identity.
+References
+elsewhere (elsewhere别处发生). Vol.007, a conversation with Tian Keyu (podcast episode, in Chinese). October 12, 2026. Video on Xiaoyuzhou: https://www.xiaoyuzhoufm.com/episode/6acd2c76e742e36efcc1fe3a ; text version on WeChat: https://mp.weixin.qq.com/s/eD0o9zyqHKaRgoKdmdLcNw ↩
+Autoregressive Model Beats Diffusion: Llama for Scalable Image Generation (LlamaGen). arXiv:2406.06525, 2024. https://arxiv.org/abs/2406.06525 ↩
+Google. flan-t5-xxl model card. Hugging Face. https://huggingface.co/google/flan-t5-xxl ↩
+OpenAI. Video generation models as world simulators . February 15, 2024. https://openai.com/index/video-generation-models-as-world-simulators/ ↩
+Goku: Flow Based Video Generative Foundation Models . arXiv:2502.04896, first submitted February 7, 2025. https://arxiv.org/abs/2502.04896 ↩
+Waver: Wave Your Way to Lifelike Video Generation . arXiv:2508.15761, first submitted August 21, 2025. https://arxiv.org/abs/2508.15761 ↩
+ITHome. Report on ByteDance's response to the intern who interfered with model training (in Chinese). October 19, 2024. https://www.ithome.com/0/803/562.htm ↩
+Caixin. Report on ByteDance suing the intern who attacked model training (in Chinese). November 28, 2024. https://companies.caixin.com/2024-11-28/102262266.html ↩
+Reuters. ByteDance seeks $1.1 million damages from intern in AI breach case, report says . November 28, 2024 (link is a syndicated copy). https://www.investing.com/news/stock-market-news/bytedance-seeks-11-million-damages-from-intern-in-ai-breach-case-report-says-3745565 ↩
+PixArt-α: Fast Training of Diffusion Transformer for Photorealistic Text-to-Image Synthesis . arXiv:2310.00426, 2023. https://arxiv.org/abs/2310.00426 ↩
+Infinity: Scaling Bitwise AutoRegressive Modeling for High-Resolution Image Synthesis . arXiv:2412.04431, 2024. https://arxiv.org/abs/2412.04431 ↩
+Media and individuals are welcome to republish this report. Please credit the source, link to the original ( https://keyu-tian-sabotage.github.io ), and keep the content intact without edits that change its meaning.

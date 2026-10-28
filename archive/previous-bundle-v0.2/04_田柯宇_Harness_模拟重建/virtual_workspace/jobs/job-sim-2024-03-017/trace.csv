@@ -1,0 +1,7 @@
+run_id,step,rank,loss,grad_norm,status
+SIM-001,0,0,1.00,0.42,ok
+SIM-001,0,1,1.01,0.41,ok
+SIM-001,1,0,0.92,0.39,ok
+SIM-001,1,1,6.80,4.90,ok
+SIM-001,2,0,0.85,0.37,ok
+SIM-001,2,1,7.20,5.30,ok

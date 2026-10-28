@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Unit tests (stdlib host)
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Ledger validation (sources / claims / artifacts)
+        run: |
+          PYTHONPATH=src python -m keyu_harness validate-ledger sources references/source_registry.csv
+          PYTHONPATH=src python -m keyu_harness validate-ledger claims references/claim_ledger.csv
+          PYTHONPATH=src python -m keyu_harness validate-ledger artifacts references/artifact_registry.csv
+      - name: End-to-end replica (positive + negative)
+        run: |
+          python fixtures/replica_2024/run_demo.py --scenario fixtures/replica_2024/scenarios/positive.json --out fixtures/replica_2024/outputs/ci-positive
+          python fixtures/replica_2024/run_demo.py --scenario fixtures/replica_2024/scenarios/negative.json --out fixtures/replica_2024/outputs/ci-negative
+      - name: Sandbox boundary audit (must be zero violations)
+        run: python fixtures/replica_2024/audit_boundary.py

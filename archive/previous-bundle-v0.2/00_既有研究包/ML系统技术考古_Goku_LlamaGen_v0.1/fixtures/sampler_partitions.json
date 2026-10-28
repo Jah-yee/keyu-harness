@@ -1,0 +1,40 @@
+{
+  "notice": "合成数据集索引，用于检测 rank 分片覆盖/重叠，不是 PyTorch 源码或攻击实现。",
+  "dataset_size": 8,
+  "cases": [
+    {
+      "name": "valid_disjoint_partition",
+      "ranks": {
+        "0": [
+          0,
+          2,
+          4,
+          6
+        ],
+        "1": [
+          1,
+          3,
+          5,
+          7
+        ]
+      }
+    },
+    {
+      "name": "invalid_overlap_and_missing",
+      "ranks": {
+        "0": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "1": [
+          2,
+          4,
+          6,
+          7
+        ]
+      }
+    }
+  ]
+}

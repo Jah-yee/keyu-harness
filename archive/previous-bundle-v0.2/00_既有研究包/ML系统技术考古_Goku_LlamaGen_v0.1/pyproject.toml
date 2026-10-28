@@ -1,0 +1,9 @@
+[project]
+name = "ml-systems-archaeology-goku-llamagen"
+version = "0.1.0"
+description = "Evidence-first educational forensics for public Goku and LlamaGen artifacts"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+
+[project.optional-dependencies]
+sim = ["torch>=2.0"]
+name = "keyu-harness"
+version = "0.7.0"
+description = "Evidence-first ML systems archaeology and synthetic reconstruction"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [{name = "Keyu Harness contributors"}]
+dependencies = []
+
+[project.scripts]
+keyu-harness = "keyu_harness.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
